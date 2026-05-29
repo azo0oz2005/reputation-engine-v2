@@ -1,0 +1,23 @@
+# البيئة الافتراضية
+venv/
+.venv/
+
+# ملفات بايثون المؤقتة
+__pycache__/
+*.pyc
+
+# الأسرار والإعدادات المحلية
+.env
+
+# قاعدة البيانات المحلية
+instance/
+*.db
+
+# ملفات يولّدها التطبيق وقت التشغيل
+static/qrcodes/*.png
+static/uploads/*.jpg
+static/uploads/*.png
+
+# نظام التشغيل
+.DS_Store
+Thumbs.db

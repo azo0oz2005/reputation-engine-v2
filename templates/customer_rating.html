@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ business.name }} · قيّم تجربتك{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-6">
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 px-6 py-10 text-center">
+
+    <div class="mb-6">
+      {% if business.logo_path %}
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-soft mb-4">
+          <img src="{{ url_for('static', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-cover">
+        </div>
+      {% else %}
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-100 text-brand-700 text-2xl font-extrabold mb-3">
+          {{ business.name[:1] }}
+        </div>
+      {% endif %}
+      <h1 class="text-xl md:text-2xl font-extrabold text-ink">{{ business.name }}</h1>
+      <p class="text-sm text-muted mt-1">{{ business.category }}</p>
+    </div>
+
+    <h2 class="text-lg md:text-xl font-bold text-ink mb-2">كيف كانت تجربتك اليوم؟</h2>
+    <p class="text-sm text-muted mb-8">يستغرق أقل من 10 ثواني</p>
+
+    <form method="POST" action="{{ url_for('customer_rating', slug=business.slug) }}" class="space-y-3">
+      {% for n in [5,4,3,2,1] %}
+        <button type="submit" name="rating" value="{{ n }}"
+                class="w-full bg-white hover:bg-brand-50 active:bg-brand-100 border-2 border-slate-100 hover:border-brand-200 rounded-2xl py-4 text-2xl font-bold text-ink transition flex items-center justify-center gap-1 shadow-soft">
+          {% for _ in range(n) %}<span class="text-amber-400">★</span>{% endfor %}
+        </button>
+      {% endfor %}
+    </form>
+
+    <p class="text-xs text-muted mt-8">رأيك يساعدنا نقدم تجربة أفضل</p>
+  </div>
+</section>
+{% endblock %}

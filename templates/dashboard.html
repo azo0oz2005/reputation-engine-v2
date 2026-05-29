@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}لوحة التحكم · {{ business.name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-4">
+
+  <div class="flex flex-wrap items-start justify-between gap-4 mb-8">
+    <div>
+      <div class="flex items-center gap-3 mb-1">
+        {% if business.logo_path %}
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl overflow-hidden bg-white border border-slate-100">
+            <img src="{{ url_for('static', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-cover">
+          </span>
+        {% else %}
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 text-xl font-extrabold">
+            {{ business.name[:1] }}
+          </span>
+        {% endif %}
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-ink leading-tight">{{ business.name }}</h1>
+          <p class="text-sm text-muted">{{ business.category }}</p>
+        </div>
+      </div>
+    </div>
+    <a href="{{ url_for('admin_add_business') }}"
+       class="bg-white hover:bg-slate-50 text-ink font-semibold px-4 py-2 rounded-xl border border-slate-200 text-sm">
+      + نشاط آخر
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+
+    <!-- QR card -->
+    <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100 lg:col-span-1 flex flex-col items-center text-center">
+      <h2 class="font-bold text-lg text-ink mb-4">رمز QR الخاص بنشاطك</h2>
+      {% if business.qr_code_path %}
+        <div class="bg-white p-3 rounded-2xl border border-slate-100 mb-4">
+          <img src="{{ url_for('static', filename=business.qr_code_path) }}"
+               alt="QR Code" class="w-44 h-44 object-contain">
+        </div>
+        <a href="{{ url_for('qr_download', slug=business.slug) }}"
+           class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-soft transition">
+          تحميل رمز QR
+        </a>
+      {% else %}
+        <div class="w-44 h-44 flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-muted text-sm mb-4">
+          لم يُنشأ بعد
+        </div>
+      {% endif %}
+
+      <div class="mt-5 w-full text-right">
+        <p class="text-xs font-semibold text-muted mb-1">رابط صفحة التقييم</p>
+        <div class="flex items-center gap-2 bg-surface rounded-xl border border-slate-200 px-3 py-2">
+          <input type="text" readonly value="{{ rating_url }}"
+                 class="flex-1 bg-transparent text-xs text-ink outline-none" dir="ltr"
+                 onclick="this.select()">
+        </div>
+        <a href="{{ rating_url }}" target="_blank"
+           class="inline-block mt-2 text-xs text-brand-700 hover:underline">فتح صفحة التقييم ↗</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="lg:col-span-2">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100">
+          <p class="text-sm text-muted mb-1">إجمالي التقييمات</p>
+          <p class="text-3xl font-extrabold text-ink">{{ stats.total_feedback }}</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100">
+          <p class="text-sm text-muted mb-1">متوسط التقييم</p>
+          <p class="text-3xl font-extrabold text-ink">
+            {{ stats.average_rating }}<span class="text-amber-400 text-xl"> ★</span>
+          </p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100">
+          <p class="text-sm text-muted mb-1">نسبة الرضا</p>
+          <p class="text-3xl font-extrabold text-brand-600">{{ stats.satisfaction_rate }}%</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100">
+          <p class="text-sm text-muted mb-1">ضغطات Google</p>
+          <p class="text-3xl font-extrabold text-ink">{{ stats.google_clicks }}</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100">
+          <p class="text-sm text-muted mb-1">عدد الشكاوى</p>
+          <p class="text-3xl font-extrabold text-warn">{{ stats.complaints_count }}</p>
+        </div>
+
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100">
+          <p class="text-sm text-muted mb-1">تقييمات إيجابية</p>
+          <p class="text-3xl font-extrabold text-brand-600">{{ stats.positive_count }}</p>
+        </div>
+
+      </div>
+
+      <!-- Satisfaction bar -->
+      <div class="bg-white rounded-2xl p-5 shadow-soft border border-slate-100 mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <p class="text-sm font-semibold text-ink">نسبة العملاء الراضين</p>
+          <p class="text-sm text-muted">{{ stats.positive_count }} من {{ stats.total_feedback }}</p>
+        </div>
+        <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+          <div class="h-full bg-brand-500 rounded-full transition-all"
+               style="width: {{ stats.satisfaction_rate }}%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complaints -->
+  <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100">
+    <h2 class="font-bold text-lg text-ink mb-4">آخر الشكاوى والملاحظات</h2>
+
+    {% if complaints and complaints|length > 0 %}
+      <div class="space-y-3">
+        {% for c in complaints %}
+          <div class="border border-slate-100 rounded-xl p-4 bg-surface">
+            <div class="flex items-center justify-between gap-3 mb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-amber-400 text-sm">
+                  {% for _ in range(c.rating) %}★{% endfor %}{% for _ in range(5 - c.rating) %}<span class="text-slate-200">★</span>{% endfor %}
+                </span>
+                {% if c.customer_name %}
+                  <span class="text-sm font-semibold text-ink">{{ c.customer_name }}</span>
+                {% else %}
+                  <span class="text-sm text-muted">عميل</span>
+                {% endif %}
+              </div>
+              <span class="text-xs text-muted">{{ c.created_at.strftime('%Y-%m-%d') }}</span>
+            </div>
+            <p class="text-sm text-ink leading-loose">{{ c.comment }}</p>
+            {% if c.customer_phone %}
+              <p class="text-xs text-muted mt-2" dir="ltr">📱 {{ c.customer_phone }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-center py-10">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-brand-50 text-brand-600 text-2xl mb-3">✓</div>
+        <p class="text-muted">لا توجد ملاحظات حتى الآن</p>
+      </div>
+    {% endif %}
+  </div>
+
+</section>
+{% endblock %}

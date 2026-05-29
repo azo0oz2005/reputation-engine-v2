@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}سمعة برو · جمع تقييمات Google بسهولة{% endblock %}
+
+{% block content %}
+<section class="max-w-6xl mx-auto px-4">
+
+  <div class="relative overflow-hidden rounded-3xl bg-gradient-to-bl from-brand-50 via-white to-white border border-brand-100 px-6 md:px-12 py-12 md:py-16 shadow-soft">
+    <div class="max-w-3xl">
+      <span class="inline-flex items-center gap-2 bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1 rounded-full mb-5">
+        خدمة جديدة لأصحاب الأنشطة المحلية
+      </span>
+      <h1 class="text-3xl md:text-5xl font-extrabold text-ink leading-tight mb-5">
+        خلّ تقييمات عملائك تشتغل لصالحك
+      </h1>
+      <p class="text-base md:text-lg text-muted leading-loose mb-8">
+        QR ذكي يساعدك تجمع تقييمات Google من العملاء الراضين،
+        وتستقبل ملاحظات العملاء غير الراضين داخليًا قبل ما تتحول المشكلة إلى تقييم علني.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="{{ url_for('admin_add_business') }}"
+           class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3 rounded-xl shadow-card transition">
+          إضافة نشاط جديد
+        </a>
+        <a href="#how"
+           class="bg-white hover:bg-slate-50 text-ink font-semibold px-6 py-3 rounded-xl border border-slate-200">
+          كيف تعمل الخدمة؟
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-16">
+    <h2 class="text-2xl md:text-3xl font-extrabold text-ink mb-2 text-center">مزايا سمعة برو</h2>
+    <p class="text-center text-muted mb-10">كل ما تحتاجه لإدارة سمعة نشاطك في مكان واحد</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100">
+        <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center text-xl mb-4">⬛</div>
+        <h3 class="font-bold text-lg text-ink mb-2">QR جاهز للطباعة</h3>
+        <p class="text-muted text-sm leading-loose">
+          نولّد لك رمز QR خاص بنشاطك. اطبعه وضعه عند الكاشير أو على الطاولات.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100">
+        <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center text-xl mb-4">★</div>
+        <h3 class="font-bold text-lg text-ink mb-2">توجيه العملاء الراضين إلى Google</h3>
+        <p class="text-muted text-sm leading-loose">
+          العميل الراضي يصل بضغطة واحدة لصفحة تقييم Google الخاصة بنشاطك.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100">
+        <div class="w-12 h-12 rounded-xl bg-brand-100 text-brand-700 flex items-center justify-center text-xl mb-4">✎</div>
+        <h3 class="font-bold text-lg text-ink mb-2">استقبال الشكاوى داخليًا</h3>
+        <p class="text-muted text-sm leading-loose">
+          ملاحظات العملاء غير الراضين توصلك في لوحة التحكم لتحسين التجربة.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="how" class="mt-20">
+    <h2 class="text-2xl md:text-3xl font-extrabold text-ink mb-2 text-center">كيف تعمل الخدمة؟</h2>
+    <p class="text-center text-muted mb-10">ثلاث خطوات بسيطة وتبدأ</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100 relative">
+        <div class="absolute -top-4 right-6 w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold">1</div>
+        <h3 class="font-bold text-lg text-ink mb-2 mt-3">أضف نشاطك</h3>
+        <p class="text-muted text-sm leading-loose">
+          أدخل اسم نشاطك ونوعه ورابط تقييم Google Maps، وسننشئ لك صفحة تقييم ورمز QR خاص بك.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100 relative">
+        <div class="absolute -top-4 right-6 w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold">2</div>
+        <h3 class="font-bold text-lg text-ink mb-2 mt-3">اطبع QR وضعه في المكان المناسب</h3>
+        <p class="text-muted text-sm leading-loose">
+          ضع رمز QR على الطاولات أو الكاشير أو في الفاتورة. العميل يمسحه ويعطيك تقييمه.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-soft border border-slate-100 relative">
+        <div class="absolute -top-4 right-6 w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold">3</div>
+        <h3 class="font-bold text-lg text-ink mb-2 mt-3">تابع التقييمات والملاحظات</h3>
+        <p class="text-muted text-sm leading-loose">
+          من لوحة التحكم تشوف عدد التقييمات، نسبة الرضا، الملاحظات الواردة، وكم عميل ضغط على رابط Google.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-20 bg-ink rounded-3xl p-8 md:p-12 text-center">
+    <h2 class="text-white text-2xl md:text-3xl font-extrabold mb-3">جاهز تبدأ؟</h2>
+    <p class="text-slate-300 mb-6">أضف نشاطك خلال أقل من دقيقتين وابدأ تجمع تقييمات Google.</p>
+    <a href="{{ url_for('admin_add_business') }}"
+       class="inline-block bg-brand-500 hover:bg-brand-600 text-white font-bold px-6 py-3 rounded-xl">
+      إضافة نشاط جديد
+    </a>
+  </div>
+
+</section>
+{% endblock %}

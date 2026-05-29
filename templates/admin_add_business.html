@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}إضافة نشاط جديد · سمعة برو{% endblock %}
+
+{% block content %}
+<section class="max-w-2xl mx-auto px-4">
+  <div class="mb-6">
+    <h1 class="text-2xl md:text-3xl font-extrabold text-ink mb-2">إضافة نشاط جديد</h1>
+    <p class="text-muted">عبّي بيانات نشاطك وراح ننشئ لك صفحة تقييم خاصة ورمز QR جاهز للطباعة.</p>
+  </div>
+
+  <form method="POST" action="{{ url_for('admin_add_business') }}" enctype="multipart/form-data"
+        class="bg-white border border-slate-100 rounded-2xl p-6 md:p-8 shadow-soft space-y-5">
+
+    <div>
+      <label class="block text-sm font-semibold text-ink mb-2">شعار / صورة النشاط <span class="text-muted font-normal">(اختياري)</span></label>
+      <div class="flex items-center gap-4">
+        <div id="logoPreviewWrap" class="w-20 h-20 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center overflow-hidden shrink-0">
+          <img id="logoPreview" src="" alt="" class="w-full h-full object-cover hidden">
+          <span id="logoPlaceholder" class="text-brand-600 text-2xl">＋</span>
+        </div>
+        <div class="flex-1">
+          <input id="logo" name="logo" type="file" accept="image/png, image/jpeg, image/webp"
+                 class="block w-full text-sm text-muted file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-brand-100 file:text-brand-700 file:font-semibold hover:file:bg-brand-200 cursor-pointer">
+          <p class="text-xs text-muted mt-2">تظهر الصورة في صفحة تقييم العميل. صيغ مدعومة: PNG / JPG / WEBP.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label for="name" class="block text-sm font-semibold text-ink mb-2">اسم النشاط *</label>
+      <input id="name" name="name" type="text" required
+             value="{{ form.name or '' }}"
+             placeholder="مثال: كافيه نوفا"
+             class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+    </div>
+
+    <div>
+      <label for="category" class="block text-sm font-semibold text-ink mb-2">نوع النشاط *</label>
+      <select id="category" name="category" required
+              class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent bg-white">
+        <option value="" disabled {% if not form.category %}selected{% endif %}>اختر نوع النشاط</option>
+        {% set cats = ['كافيه', 'مطعم', 'عيادة', 'صالون', 'مغسلة سيارات', 'مركز صيانة', 'محل تجاري', 'أخرى'] %}
+        {% for c in cats %}
+          <option value="{{ c }}" {% if form.category == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label for="google_review_url" class="block text-sm font-semibold text-ink mb-2">رابط تقييم Google Maps *</label>
+      <input id="google_review_url" name="google_review_url" type="url" required
+             value="{{ form.google_review_url or '' }}"
+             placeholder="https://g.page/r/..."
+             class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" dir="ltr">
+      <p class="text-xs text-muted mt-2">انسخ الرابط من حساب نشاطك على Google.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label for="phone" class="block text-sm font-semibold text-ink mb-2">رقم الجوال</label>
+        <input id="phone" name="phone" type="tel"
+               value="{{ form.phone or '' }}"
+               placeholder="05xxxxxxxx"
+               class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" dir="ltr">
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-semibold text-ink mb-2">الإيميل</label>
+        <input id="email" name="email" type="email"
+               value="{{ form.email or '' }}"
+               placeholder="you@example.com"
+               class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" dir="ltr">
+      </div>
+    </div>
+
+    <div>
+      <label for="slug" class="block text-sm font-semibold text-ink mb-2">المعرّف (slug) — اختياري</label>
+      <input id="slug" name="slug" type="text"
+             value="{{ form.slug or '' }}"
+             placeholder="cafe-nova"
+             class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent" dir="ltr">
+      <p class="text-xs text-muted mt-2">إذا تركته فارغًا، راح ننشئه تلقائيًا من اسم النشاط.</p>
+    </div>
+
+    <div class="pt-2 flex flex-wrap gap-3">
+      <button type="submit"
+              class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3 rounded-xl shadow-card">
+        حفظ النشاط وإنشاء QR
+      </button>
+      <a href="{{ url_for('home') }}"
+         class="bg-white hover:bg-slate-50 text-ink font-semibold px-6 py-3 rounded-xl border border-slate-200">
+        إلغاء
+      </a>
+    </div>
+  </form>
+</section>
+
+<script>
+  (function () {
+    var input = document.getElementById('logo');
+    var img = document.getElementById('logoPreview');
+    var ph = document.getElementById('logoPlaceholder');
+    if (!input) return;
+    input.addEventListener('change', function () {
+      var file = input.files && input.files[0];
+      if (!file) return;
+      var url = URL.createObjectURL(file);
+      img.src = url;
+      img.classList.remove('hidden');
+      if (ph) ph.classList.add('hidden');
+    });
+  })();
+</script>
+{% endblock %}

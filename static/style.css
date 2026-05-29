@@ -1,0 +1,18 @@
+/* سمعة برو — تنسيقات مساعدة بسيطة فوق Tailwind */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+input[readonly] {
+  cursor: pointer;
+}
+
+::selection {
+  background-color: #DCFCE7;
+  color: #0F172A;
+}
+
+html {
+  scroll-behavior: smooth;
+}

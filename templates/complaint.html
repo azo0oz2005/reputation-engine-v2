@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}ملاحظتك تهمنا · {{ business.name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-6">
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 px-6 py-10">
+
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-50 text-warn text-3xl mb-4">
+        ✎
+      </div>
+      <h1 class="text-xl font-extrabold text-ink mb-2">نعتذر أن تجربتك لم تكن بالمستوى المطلوب</h1>
+      <p class="text-muted text-sm leading-loose">
+        اكتب ملاحظتك وسيتم متابعتها من الإدارة لتحسين الخدمة.
+      </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('complaint', feedback_id=feedback.id) }}" class="space-y-4">
+
+      <div>
+        <label for="comment" class="block text-sm font-semibold text-ink mb-2">ملاحظتك *</label>
+        <textarea id="comment" name="comment" rows="5" required
+                  placeholder="اكتب لنا تفاصيل تجربتك..."
+                  class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"></textarea>
+      </div>
+
+      <div>
+        <label for="customer_name" class="block text-sm font-semibold text-ink mb-2">الاسم <span class="text-muted font-normal">(اختياري)</span></label>
+        <input id="customer_name" name="customer_name" type="text"
+               class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+      </div>
+
+      <div>
+        <label for="customer_phone" class="block text-sm font-semibold text-ink mb-2">رقم الجوال <span class="text-muted font-normal">(اختياري)</span></label>
+        <input id="customer_phone" name="customer_phone" type="tel" dir="ltr"
+               placeholder="05xxxxxxxx"
+               class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-2xl text-lg shadow-card mt-2">
+        إرسال الملاحظة
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}شكرًا لتقييمك · {{ business.name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-6">
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 px-6 py-10 text-center">
+
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-brand-100 text-brand-700 text-4xl mb-6">
+      ★
+    </div>
+
+    <h1 class="text-2xl font-extrabold text-ink mb-3">سعداء أن تجربتك كانت ممتازة</h1>
+    <p class="text-muted leading-loose mb-8">
+      تقييمك على Google يساعدنا نوصل لعملاء أكثر، ويأخذ منك أقل من دقيقة.
+    </p>
+
+    <a href="{{ url_for('go_google', feedback_id=feedback.id) }}"
+       class="block w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-2xl text-lg shadow-card transition">
+      قيّمنا على Google
+    </a>
+
+    <p class="text-xs text-muted mt-6">سيتم تحويلك إلى صفحة تقييم {{ business.name }} على Google</p>
+  </div>
+</section>
+{% endblock %}
