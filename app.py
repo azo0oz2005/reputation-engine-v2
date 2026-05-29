@@ -5,6 +5,8 @@ from urllib.parse import urlparse
 
 import qrcode
 from dotenv import load_dotenv
+import secrets
+
 from flask import (
     Flask,
     abort,
@@ -13,6 +15,7 @@ from flask import (
     render_template,
     request,
     send_from_directory,
+    session,
     url_for,
 )
 from PIL import Image
@@ -71,6 +74,15 @@ def ensure_schema():
     if "logo_path" not in existing:
         with db.engine.begin() as conn:
             conn.execute(text("ALTER TABLE businesses ADD COLUMN logo_path VARCHAR(300)"))
+    if "access_code" not in existing:
+        with db.engine.begin() as conn:
+            conn.execute(text("ALTER TABLE businesses ADD COLUMN access_code VARCHAR(12)"))
+        # توليد رمز للأنشطة القديمة التي ليس لها رمز
+        for biz in Business.query.filter(
+            (Business.access_code.is_(None)) | (Business.access_code == "")
+        ).all():
+            biz.access_code = generate_access_code()
+        db.session.commit()
 
 
 def slugify(value: str) -> str:
@@ -81,6 +93,11 @@ def slugify(value: str) -> str:
     value = re.sub(r"[^\w\-؀-ۿ]", "", value, flags=re.UNICODE)
     value = re.sub(r"-+", "-", value).strip("-")
     return value or "business"
+
+
+def generate_access_code() -> str:
+    """يولّد رمز دخول سري من 6 أرقام للوحة التحكم."""
+    return f"{secrets.randbelow(1_000_000):06d}"
 
 
 def ensure_unique_slug(base_slug: str) -> str:
@@ -211,6 +228,7 @@ def register_routes(app: Flask):
                 phone=phone or None,
                 email=email or None,
                 logo_path=logo_path,
+                access_code=generate_access_code(),
             )
             db.session.add(business)
             db.session.commit()
@@ -222,7 +240,13 @@ def register_routes(app: Flask):
             except Exception as exc:
                 flash(f"تعذّر إنشاء رمز QR: {exc}", "error")
 
-            flash("تم إضافة النشاط بنجاح.", "success")
+            # تسجيل دخول صاحب النشاط تلقائيًا للوحة التحكم بعد الإضافة
+            session[f"auth_{business.slug}"] = True
+            flash(
+                f"تم إضافة النشاط بنجاح. رمز الدخول السري للوحة التحكم هو: "
+                f"{business.access_code} — احفظه في مكان آمن.",
+                "success",
+            )
             return redirect(url_for("dashboard", slug=business.slug))
 
         return render_template("admin_add_business.html", form={})
@@ -307,11 +331,43 @@ def register_routes(app: Flask):
     def thank_you():
         return render_template("thank_you.html")
 
+    @app.route("/dashboard/<slug>/login", methods=["GET", "POST"])
+    def dashboard_login(slug):
+        business = Business.query.filter_by(slug=slug).first()
+        if business is None:
+            abort(404)
+
+        # إن لم يكن للنشاط رمز (بيانات قديمة) ولّد واحدًا
+        if not business.access_code:
+            business.access_code = generate_access_code()
+            db.session.commit()
+
+        if session.get(f"auth_{slug}"):
+            return redirect(url_for("dashboard", slug=slug))
+
+        if request.method == "POST":
+            code = (request.form.get("access_code") or "").strip()
+            if code and code == business.access_code:
+                session[f"auth_{slug}"] = True
+                return redirect(url_for("dashboard", slug=slug))
+            flash("الرمز السري غير صحيح.", "error")
+
+        return render_template("dashboard_login.html", business=business)
+
+    @app.route("/dashboard/<slug>/logout")
+    def dashboard_logout(slug):
+        session.pop(f"auth_{slug}", None)
+        flash("تم تسجيل الخروج من لوحة التحكم.", "success")
+        return redirect(url_for("dashboard_login", slug=slug))
+
     @app.route("/dashboard/<slug>")
     def dashboard(slug):
         business = Business.query.filter_by(slug=slug).first()
         if business is None:
             abort(404)
+
+        if not session.get(f"auth_{slug}"):
+            return redirect(url_for("dashboard_login", slug=slug))
 
         feedbacks = (
             Feedback.query.filter_by(business_id=business.id)

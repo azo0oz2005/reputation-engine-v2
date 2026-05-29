@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}دخول لوحة التحكم · {{ business.name }}{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4">
+  <div class="bg-white rounded-2xl p-8 shadow-soft border border-slate-100 text-center">
+
+    <div class="flex flex-col items-center mb-6">
+      {% if business.logo_path %}
+        <span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden bg-white border border-slate-100 mb-3">
+          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-cover">
+        </span>
+      {% else %}
+        <span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-100 text-brand-700 text-2xl font-extrabold mb-3">
+          {{ business.name[:1] }}
+        </span>
+      {% endif %}
+      <h1 class="text-xl font-extrabold text-ink">{{ business.name }}</h1>
+      <p class="text-sm text-muted mt-1">لوحة التحكم محمية برمز سري</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('dashboard_login', slug=business.slug) }}" class="text-right">
+      <label class="block text-sm font-semibold text-ink mb-2">الرمز السري</label>
+      <input type="text" name="access_code" inputmode="numeric" autocomplete="off"
+             placeholder="مثال: 123456" dir="ltr"
+             class="w-full text-center tracking-[0.4em] text-lg bg-surface border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 mb-4"
+             autofocus required>
+      <button type="submit"
+              class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-soft transition">
+        دخول
+      </button>
+    </form>
+
+    <p class="text-xs text-muted mt-5 leading-relaxed">
+      الرمز السري ظهر لك عند إنشاء النشاط. إذا نسيته، تواصل مع مزوّد الخدمة لإعادة ضبطه.
+    </p>
+  </div>
+</section>
+{% endblock %}

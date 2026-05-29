@@ -22,10 +22,16 @@
         </div>
       </div>
     </div>
-    <a href="{{ url_for('admin_add_business') }}"
-       class="bg-white hover:bg-slate-50 text-ink font-semibold px-4 py-2 rounded-xl border border-slate-200 text-sm">
-      + نشاط آخر
-    </a>
+    <div class="flex items-center gap-2">
+      <a href="{{ url_for('admin_add_business') }}"
+         class="bg-white hover:bg-slate-50 text-ink font-semibold px-4 py-2 rounded-xl border border-slate-200 text-sm">
+        + نشاط آخر
+      </a>
+      <a href="{{ url_for('dashboard_logout', slug=business.slug) }}"
+         class="bg-white hover:bg-slate-50 text-muted hover:text-danger font-semibold px-4 py-2 rounded-xl border border-slate-200 text-sm">
+        تسجيل خروج
+      </a>
+    </div>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
@@ -58,6 +64,16 @@
         <a href="{{ rating_url }}" target="_blank"
            class="inline-block mt-2 text-xs text-brand-700 hover:underline">فتح صفحة التقييم ↗</a>
       </div>
+
+      {% if business.access_code %}
+      <div class="mt-5 w-full text-right">
+        <p class="text-xs font-semibold text-muted mb-1">الرمز السري للوحة التحكم</p>
+        <div class="flex items-center gap-2 bg-amber-50 rounded-xl border border-amber-200 px-3 py-2">
+          <span class="flex-1 text-base font-bold tracking-[0.3em] text-ink" dir="ltr">{{ business.access_code }}</span>
+        </div>
+        <p class="text-[11px] text-muted mt-1 leading-relaxed">احتفظ به سرًّا — يلزم لدخول هذه اللوحة.</p>
+      </div>
+      {% endif %}
     </div>
 
     <!-- Stats -->
