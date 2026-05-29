@@ -55,8 +55,10 @@
         <span class="font-extrabold text-lg text-ink">سمعة برو</span>
       </a>
       <nav class="flex items-center gap-2">
+        {% block header_nav %}
         <a href="{{ url_for('home') }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">الرئيسية</a>
         <a href="{{ url_for('admin_add_business') }}" class="text-sm bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg shadow-soft">إضافة نشاط</a>
+        {% endblock %}
       </nav>
     </div>
   </header>

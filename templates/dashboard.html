@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}لوحة التحكم · {{ business.name }}{% endblock %}
+{% block header_nav %}{% endblock %}
 
 {% block content %}
 <section class="max-w-6xl mx-auto px-4">
@@ -21,16 +22,6 @@
           <p class="text-sm text-muted">{{ business.category }}</p>
         </div>
       </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <a href="{{ url_for('admin_add_business') }}"
-         class="bg-white hover:bg-slate-50 text-ink font-semibold px-4 py-2 rounded-xl border border-slate-200 text-sm">
-        + نشاط آخر
-      </a>
-      <a href="{{ url_for('dashboard_logout', slug=business.slug) }}"
-         class="bg-white hover:bg-slate-50 text-muted hover:text-danger font-semibold px-4 py-2 rounded-xl border border-slate-200 text-sm">
-        تسجيل خروج
-      </a>
     </div>
   </div>
 
