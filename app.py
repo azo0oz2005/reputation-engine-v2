@@ -24,10 +24,13 @@ from models import Business, Feedback, db
 load_dotenv()
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-QR_DIR = os.path.join(BASE_DIR, "static", "qrcodes")
-UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
+# مجلد البيانات: محليًا داخل المشروع، وعلى Render يشير للقرص الدائم عبر متغير DATA_DIR
+DATA_DIR = os.getenv("DATA_DIR", os.path.join(BASE_DIR, "data"))
+QR_DIR = os.path.join(DATA_DIR, "qrcodes")
+UPLOAD_DIR = os.path.join(DATA_DIR, "uploads")
 INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
 
+os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(QR_DIR, exist_ok=True)
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(INSTANCE_DIR, exist_ok=True)
@@ -45,7 +48,7 @@ def create_app():
     db_url = os.getenv("DATABASE_URL", "sqlite:///database.db")
     if db_url.startswith("sqlite:///") and not db_url.startswith("sqlite:////"):
         rel = db_url.replace("sqlite:///", "", 1)
-        db_url = "sqlite:///" + os.path.join(INSTANCE_DIR, rel)
+        db_url = "sqlite:///" + os.path.join(DATA_DIR, rel)
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -354,6 +357,11 @@ def register_routes(app: Flask):
             complaints=complaints[:20],
             rating_url=rating_url,
         )
+
+    @app.route("/media/<path:filename>")
+    def media(filename):
+        # يخدم الصور والـ QR من مجلد البيانات (القرص الدائم على Render)
+        return send_from_directory(DATA_DIR, filename)
 
     @app.route("/qr-download/<slug>")
     def qr_download(slug):

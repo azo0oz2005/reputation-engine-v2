@@ -9,14 +9,10 @@ __pycache__/
 # الأسرار والإعدادات المحلية
 .env
 
-# قاعدة البيانات المحلية
+# قاعدة البيانات والملفات المولّدة محليًا
 instance/
+data/
 *.db
-
-# ملفات يولّدها التطبيق وقت التشغيل
-static/qrcodes/*.png
-static/uploads/*.jpg
-static/uploads/*.png
 
 # نظام التشغيل
 .DS_Store

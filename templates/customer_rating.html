@@ -8,7 +8,7 @@
     <div class="mb-6">
       {% if business.logo_path %}
         <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl overflow-hidden bg-white border border-slate-100 shadow-soft mb-4">
-          <img src="{{ url_for('static', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-cover">
+          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-cover">
         </div>
       {% else %}
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand-100 text-brand-700 text-2xl font-extrabold mb-3">
