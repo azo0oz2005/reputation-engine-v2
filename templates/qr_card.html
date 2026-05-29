@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>بطاقة QR · {{ business.name }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Cairo', sans-serif; }
+    @media print {
+      .no-print { display: none !important; }
+      @page { margin: 0; }
+      body { background: #ffffff; }
+      .card { box-shadow: none !important; border-color: #e2e8f0 !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-6">
+
+  <div class="no-print mb-5 flex gap-2">
+    <button onclick="window.print()"
+            class="bg-green-600 hover:bg-green-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">
+      🖨️ اطبع البطاقة
+    </button>
+    <a href="{{ url_for('dashboard', slug=business.slug) }}"
+       class="bg-white border border-slate-200 text-slate-700 font-semibold px-6 py-2.5 rounded-xl">
+      رجوع للوحة
+    </a>
+  </div>
+
+  <!-- البطاقة القابلة للطباعة -->
+  <div class="card bg-white rounded-3xl shadow-xl border border-slate-200 w-[380px] px-9 py-10 text-center">
+
+    {% if business.logo_path %}
+      <img src="{{ url_for('media', filename=business.logo_path) }}"
+           alt="{{ business.name }}"
+           class="w-24 h-24 object-cover rounded-2xl mx-auto mb-4 border border-slate-100">
+    {% endif %}
+
+    <h1 class="text-2xl font-extrabold text-slate-900 leading-snug">{{ business.name }}</h1>
+
+    <p class="text-green-600 font-extrabold mt-3 text-xl">كيف كانت تجربتك معنا؟</p>
+    <p class="text-slate-500 text-sm mt-1 mb-6">امسح الرمز وشاركنا رأيك — يأخذ ثوانٍ فقط</p>
+
+    {% if business.qr_code_path %}
+      <div class="inline-block p-4 bg-white rounded-2xl border-2 border-slate-100">
+        <img src="{{ url_for('media', filename=business.qr_code_path) }}"
+             alt="QR" class="w-56 h-56 object-contain">
+      </div>
+    {% else %}
+      <div class="w-56 h-56 mx-auto flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-sm">
+        لم يُنشأ رمز QR بعد
+      </div>
+    {% endif %}
+
+    <div class="flex items-center justify-center gap-1 text-amber-400 text-3xl mt-6">
+      ★★★★★
+    </div>
+
+    <p class="text-[11px] text-slate-400 mt-6">بواسطة سمعة برو</p>
+  </div>
+
+  <p class="no-print text-xs text-slate-400 mt-4">نصيحة: اختر "حفظ كملف PDF" من نافذة الطباعة لمشاركتها أو طباعتها لاحقًا.</p>
+
+</body>
+</html>

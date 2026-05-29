@@ -9,6 +9,8 @@ services:
     envVars:
       - key: SECRET_KEY
         generateValue: true
+      - key: ADMIN_CODE
+        sync: false
       - key: DATABASE_URL
         value: sqlite:///database.db
       - key: DATA_DIR

@@ -45,6 +45,10 @@
            class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-soft transition">
           تحميل رمز QR
         </a>
+        <a href="{{ url_for('qr_card', slug=business.slug) }}" target="_blank"
+           class="w-full mt-2 bg-white hover:bg-slate-50 text-ink font-bold py-3 rounded-xl border border-slate-200 transition">
+          🖨️ بطاقة جاهزة للطباعة
+        </a>
       {% else %}
         <div class="w-44 h-44 flex items-center justify-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-muted text-sm mb-4">
           لم يُنشأ بعد

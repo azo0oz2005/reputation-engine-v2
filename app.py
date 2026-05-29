@@ -41,6 +41,9 @@ os.makedirs(INSTANCE_DIR, exist_ok=True)
 ALLOWED_IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_LOGO_SIZE = (600, 600)
 
+# رمز الدخول للوحة الإدارة (إضافة الأنشطة). يُضبط من إعدادات Render، ولا يُكتب في الكود.
+ADMIN_CODE = (os.getenv("ADMIN_CODE") or "").strip()
+
 
 def create_app():
     app = Flask(__name__, instance_path=INSTANCE_DIR)
@@ -165,8 +168,37 @@ def register_routes(app: Flask):
     def home():
         return render_template("home.html")
 
+    @app.route("/admin/login", methods=["GET", "POST"])
+    def admin_login():
+        if session.get("admin_auth"):
+            return redirect(url_for("admin_add_business"))
+
+        if request.method == "POST":
+            code = (request.form.get("admin_code") or "").strip()
+            if not ADMIN_CODE:
+                flash(
+                    "لم يتم ضبط رمز الإدارة بعد. أضف المتغيّر ADMIN_CODE في إعدادات الخادم.",
+                    "error",
+                )
+            elif code == ADMIN_CODE:
+                session["admin_auth"] = True
+                return redirect(url_for("admin_add_business"))
+            else:
+                flash("رمز الإدارة غير صحيح.", "error")
+
+        return render_template("admin_login.html")
+
+    @app.route("/admin/logout")
+    def admin_logout():
+        session.pop("admin_auth", None)
+        flash("تم تسجيل الخروج من لوحة الإدارة.", "success")
+        return redirect(url_for("admin_login"))
+
     @app.route("/admin/add", methods=["GET", "POST"])
     def admin_add_business():
+        if not session.get("admin_auth"):
+            return redirect(url_for("admin_login"))
+
         if request.method == "POST":
             name = (request.form.get("name") or "").strip()
             category = (request.form.get("category") or "").strip()
@@ -413,6 +445,15 @@ def register_routes(app: Flask):
             complaints=complaints[:20],
             rating_url=rating_url,
         )
+
+    @app.route("/qr-card/<slug>")
+    def qr_card(slug):
+        business = Business.query.filter_by(slug=slug).first()
+        if business is None:
+            abort(404)
+        if not session.get(f"auth_{slug}"):
+            return redirect(url_for("dashboard_login", slug=slug))
+        return render_template("qr_card.html", business=business)
 
     @app.route("/media/<path:filename>")
     def media(filename):
