@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% block title %}دخول لوحة التحكم · {{ business.name }}{% endblock %}
 {% block header_nav %}{% endblock %}
+{% block header_brand %}
+<div class="flex items-center gap-2">
+  <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-brand-100 text-brand-700 font-bold">س</span>
+  <span class="font-extrabold text-lg text-ink">سمعة برو</span>
+</div>
+{% endblock %}
 
 {% block content %}
 <section class="max-w-md mx-auto px-4">

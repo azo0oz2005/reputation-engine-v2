@@ -50,10 +50,12 @@
 
   <header class="bg-white border-b border-slate-100">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      {% block header_brand %}
       <a href="{{ url_for('home') }}" class="flex items-center gap-2">
         <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-brand-100 text-brand-700 font-bold">س</span>
         <span class="font-extrabold text-lg text-ink">سمعة برو</span>
       </a>
+      {% endblock %}
       <nav class="flex items-center gap-2">
         {% block header_nav %}
         <a href="{{ url_for('home') }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">الرئيسية</a>
