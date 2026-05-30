@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سمعة برو · حوّل عملاءك الراضين إلى تقييمات تجلب لك مبيعات</title>
+  <meta name="description" content="نظام ذكي يجمع تقييمات عملائك الراضين على Google ويلتقط الملاحظات داخليًا — تقييم أعلى يعني عملاء أكثر ومبيعات أكثر.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { cairo: ['Cairo','sans-serif'] },
+        colors: {
+          brand: { 50:'#F0FDF4',100:'#DCFCE7',200:'#BBF7D0',500:'#22C55E',600:'#16A34A',700:'#15803D',900:'#14532D' },
+          ink:'#0F172A', muted:'#64748B'
+        }
+      }}
+    }
+  </script>
+  <style>
+    html,body{font-family:'Cairo',sans-serif;}
+    .hero-grad{background:linear-gradient(135deg,#14532D 0%,#16A34A 55%,#22C55E 100%);}
+    .glass{background:rgba(255,255,255,.10);backdrop-filter:blur(6px);}
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    .floaty{animation:floaty 4s ease-in-out infinite}
+  </style>
+</head>
+<body class="bg-white text-ink antialiased">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero-grad text-white">
+    <div class="max-w-5xl mx-auto px-5 pt-16 pb-20 text-center">
+      <span class="inline-flex items-center gap-2 glass border border-white/20 rounded-full px-4 py-1.5 text-sm font-semibold mb-6">
+        ⭐ سمعة برو · لإدارة سمعة نشاطك
+      </span>
+      <h1 class="text-3xl md:text-5xl font-900 font-extrabold leading-[1.25] mb-5">
+        تقييماتك على Google<br>
+        <span class="text-brand-100">هي مندوب المبيعات الصامت</span><br>
+        الذي يعمل لك ٢٤ ساعة
+      </h1>
+      <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-8 leading-loose">
+        كل عميل راضٍ يخرج من عندك دون أن يقيّمك = مبيعات ضائعة.
+        سمعة برو يحوّل رضاهم إلى تقييمات حقيقية على Google — ويلتقط أي ملاحظة قبل أن تنتشر.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="#cta" class="bg-white text-brand-700 font-extrabold px-8 py-4 rounded-2xl shadow-xl hover:scale-[1.03] transition text-lg">
+          ابدأ تجربة مجانية ١٤ يوم
+        </a>
+        <a href="#how" class="glass border border-white/30 text-white font-bold px-8 py-4 rounded-2xl hover:bg-white/20 transition text-lg">
+          كيف يعمل؟
+        </a>
+      </div>
+      <p class="text-white/70 text-sm mt-5">بدون عقود · بدون تطبيق · يجهز في ٥ دقائق</p>
+    </div>
+  </section>
+
+  <!-- ===== الأرقام ===== -->
+  <section class="max-w-5xl mx-auto px-5 -mt-12 relative z-10">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 text-center">
+        <p class="text-4xl font-extrabold text-brand-600">93%</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">من العملاء يقرؤون التقييمات قبل زيارة أي مكان</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 text-center">
+        <p class="text-4xl font-extrabold text-brand-600">+9%</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">زيادة محتملة في الإيرادات مقابل كل نجمة إضافية*</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 text-center">
+        <p class="text-4xl font-extrabold text-brand-600">31%</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">إنفاق أعلى لدى الأعمال ذات التقييمات الممتازة</p>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 text-center">
+        <p class="text-4xl font-extrabold text-brand-600">88%</p>
+        <p class="text-sm text-muted mt-2 leading-relaxed">يثقون بالتقييمات بقدر ثقتهم بتوصية صديق</p>
+      </div>
+    </div>
+    <p class="text-center text-xs text-slate-400 mt-3">* دراسات عالمية في سلوك المستهلك (Harvard Business School · BrightLocal).</p>
+  </section>
+
+  <!-- ===== المشكلة ===== -->
+  <section class="max-w-5xl mx-auto px-5 py-20">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-3">المشكلة التي تكلّفك يوميًا</h2>
+      <p class="text-muted max-w-2xl mx-auto leading-loose">عميلك سعيد… لكنه يخرج بصمت. والعميل المنزعج هو الوحيد الذي يكتب — علنًا أمام الجميع.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="bg-red-50 border border-red-100 rounded-2xl p-6">
+        <div class="text-3xl mb-3">😶</div>
+        <h3 class="font-bold mb-2">الراضون يصمتون</h3>
+        <p class="text-sm text-muted leading-relaxed">٩٫٥ من كل ١٠ عملاء سعداء لا يكتبون تقييمًا — وأنت تخسر دليلك الأقوى.</p>
+      </div>
+      <div class="bg-red-50 border border-red-100 rounded-2xl p-6">
+        <div class="text-3xl mb-3">😡</div>
+        <h3 class="font-bold mb-2">المنزعج يكتب علنًا</h3>
+        <p class="text-sm text-muted leading-relaxed">ملاحظة سلبية واحدة على Google يشوفها كل عميل قادم — وتأثيرها يدوم.</p>
+      </div>
+      <div class="bg-red-50 border border-red-100 rounded-2xl p-6">
+        <div class="text-3xl mb-3">📉</div>
+        <h3 class="font-bold mb-2">تقييم أقل = ترتيب أقل</h3>
+        <p class="text-sm text-muted leading-relaxed">Google يُظهر الأعلى تقييمًا أولًا — التقييم المنخفض يدفنك تحت منافسيك.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== كيف يعمل ===== -->
+  <section id="how" class="bg-brand-50/60 py-20">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">كيف يعمل سمعة برو؟</h2>
+        <p class="text-muted">ثلاث خطوات بسيطة — تشتغل تلقائيًا بعد التركيب</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl p-7 shadow-soft border border-slate-100 text-center">
+          <div class="w-12 h-12 mx-auto rounded-xl bg-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-4">١</div>
+          <h3 class="font-bold text-lg mb-2">العميل يمسح رمز QR</h3>
+          <p class="text-sm text-muted leading-relaxed">رمز أنيق على الطاولة أو الفاتورة عليه شعارك. يفتح صفحة تقييم بثوانٍ.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-7 shadow-soft border border-slate-100 text-center">
+          <div class="w-12 h-12 mx-auto rounded-xl bg-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-4">٢</div>
+          <h3 class="font-bold text-lg mb-2">يختار تقييمه</h3>
+          <p class="text-sm text-muted leading-relaxed">الراضي يُوجَّه لكتابة تقييمه على Google مباشرة. وغير الراضي تصل ملاحظته إليك أنت خاصة.</p>
+        </div>
+        <div class="bg-white rounded-2xl p-7 shadow-soft border border-slate-100 text-center">
+          <div class="w-12 h-12 mx-auto rounded-xl bg-brand-600 text-white font-extrabold text-xl flex items-center justify-center mb-4">٣</div>
+          <h3 class="font-bold text-lg mb-2">تتابع كل شيء بلوحة</h3>
+          <p class="text-sm text-muted leading-relaxed">لوحة تحكم خاصة تعرض عدد التقييمات، نسبة الرضا، والملاحظات — لحظة بلحظة.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== حاسبة العائد ===== -->
+  <section class="max-w-5xl mx-auto px-5 py-20">
+    <div class="bg-ink text-white rounded-3xl p-8 md:p-12 text-center">
+      <h2 class="text-2xl md:text-3xl font-extrabold mb-4">الرياضيات في صفّك 📈</h2>
+      <p class="text-white/80 max-w-2xl mx-auto mb-8 leading-loose">
+        لنفترض أن مبيعاتك الشهرية <span class="text-brand-200 font-bold">٨٠٬٠٠٠ ريال</span>.
+        رفع تقييمك نجمة واحدة قد يرفع الإيراد حتى ٩٪ وفق دراسة هارفارد:
+      </p>
+      <div class="grid sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+        <div class="glass rounded-2xl p-6 border border-white/10">
+          <p class="text-sm text-white/70 mb-1">زيادة محتملة شهريًا</p>
+          <p class="text-3xl font-extrabold text-brand-200">+٧٬٢٠٠ ﷼</p>
+        </div>
+        <div class="glass rounded-2xl p-6 border border-white/10">
+          <p class="text-sm text-white/70 mb-1">سنويًا</p>
+          <p class="text-3xl font-extrabold text-brand-200">+٨٦٬٠٠٠ ﷼</p>
+        </div>
+        <div class="glass rounded-2xl p-6 border border-white/10">
+          <p class="text-sm text-white/70 mb-1">تكلفة الخدمة</p>
+          <p class="text-3xl font-extrabold text-white">٩٩ ﷼<span class="text-base font-normal">/شهر</span></p>
+        </div>
+      </div>
+      <p class="text-white/60 text-sm mt-6">أرقام توضيحية مبنية على دراسات السوق — النتيجة الفعلية تختلف من نشاط لآخر.</p>
+    </div>
+  </section>
+
+  <!-- ===== المميزات ===== -->
+  <section class="bg-brand-50/60 py-20">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">كل ما تحتاجه في خدمة واحدة</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft"><div class="text-2xl mb-2">⭐</div><h3 class="font-bold mb-1">تقييمات Google أكثر</h3><p class="text-sm text-muted">حوّل رضا عملائك إلى تقييمات حقيقية تلقائيًا.</p></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft"><div class="text-2xl mb-2">🛡️</div><h3 class="font-bold mb-1">احمِ سمعتك</h3><p class="text-sm text-muted">الملاحظات تصلك خاصة لتعالجها قبل أن تنتشر.</p></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft"><div class="text-2xl mb-2">📱</div><h3 class="font-bold mb-1">رمز QR + بطاقة طباعة</h3><p class="text-sm text-muted">جاهز للطاولات والفواتير بشعارك.</p></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft"><div class="text-2xl mb-2">📊</div><h3 class="font-bold mb-1">لوحة تحكم لحظية</h3><p class="text-sm text-muted">عدد التقييمات، نسبة الرضا، والملاحظات.</p></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft"><div class="text-2xl mb-2">🎨</div><h3 class="font-bold mb-1">بهوية نشاطك</h3><p class="text-sm text-muted">شعارك واسمك في صفحة التقييم.</p></div>
+        <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-soft"><div class="text-2xl mb-2">⚡</div><h3 class="font-bold mb-1">يجهز في ٥ دقائق</h3><p class="text-sm text-muted">بدون تطبيق وبدون تعقيد تقني.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section id="cta" class="hero-grad text-white py-20">
+    <div class="max-w-3xl mx-auto px-5 text-center">
+      <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-snug">جرّبها مجانًا ١٤ يوم</h2>
+      <p class="text-white/90 text-lg mb-8 leading-loose">
+        شوف بنفسك كم تقييم جديد يجيك خلال أسبوعين — بدون أي التزام.
+        إذا عجبتك، تكمل. إذا لا، توقف بضغطة.
+      </p>
+      {% if whatsapp %}
+      <a href="https://wa.me/{{ whatsapp }}?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%A8%D8%BA%D9%89%20%D8%A3%D8%AC%D8%B1%D8%A8%20%D8%B3%D9%85%D8%B9%D8%A9%20%D8%A8%D8%B1%D9%88%20%D9%84%D9%86%D8%B4%D8%A7%D8%B7%D9%8A"
+         class="inline-flex items-center gap-2 bg-white text-brand-700 font-extrabold px-10 py-4 rounded-2xl shadow-xl hover:scale-[1.03] transition text-lg">
+        💬 تواصل معنا على واتساب
+      </a>
+      {% else %}
+      <div class="inline-flex items-center gap-2 bg-white text-brand-700 font-extrabold px-10 py-4 rounded-2xl shadow-xl text-lg">
+        💬 تواصل معنا الآن
+      </div>
+      <p class="text-white/70 text-sm mt-4">للتواصل: <span class="font-bold" dir="ltr">+966 5X XXX XXXX</span></p>
+      {% endif %}
+      <p class="text-white/70 text-sm mt-6">سمعة برو · خدمة سعودية لإدارة سمعة الأنشطة المحلية</p>
+    </div>
+  </section>
+
+  <footer class="py-8 text-center text-sm text-muted">
+    © سمعة برو — جميع الحقوق محفوظة
+  </footer>
+
+  {% if whatsapp %}
+  <!-- زر واتساب عائم -->
+  <a href="https://wa.me/{{ whatsapp }}?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85"
+     class="fixed bottom-5 left-5 z-50 floaty bg-[#25D366] text-white font-bold rounded-full shadow-2xl w-14 h-14 flex items-center justify-center text-2xl hover:scale-110 transition" aria-label="واتساب">
+     💬
+  </a>
+  {% endif %}
+
+</body>
+</html>

@@ -168,6 +168,12 @@ def register_routes(app: Flask):
     def home():
         return render_template("home.html")
 
+    @app.route("/pitch")
+    def pitch():
+        # رقم واتساب للتواصل (يُضبط من إعدادات الخادم SALES_WHATSAPP بصيغة 9665XXXXXXXX)
+        whatsapp = (os.getenv("SALES_WHATSAPP") or "").strip()
+        return render_template("pitch.html", whatsapp=whatsapp)
+
     @app.route("/admin/login", methods=["GET", "POST"])
     def admin_login():
         if session.get("admin_auth"):
