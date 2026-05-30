@@ -173,7 +173,8 @@ def save_logo(file_storage, slug: str):
 def register_routes(app: Flask):
     @app.route("/")
     def home():
-        return render_template("home.html")
+        # الصفحة الرئيسية تذهب للوحة الإدارة (وهي بدورها تطلب الدخول إن لم تكن مسجّلاً)
+        return redirect(url_for("admin_dashboard"))
 
     @app.route("/pitch")
     def pitch():
