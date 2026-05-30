@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block title %}إضافة نشاط جديد · سمعة برو{% endblock %}
 
+{% block header_nav %}
+<a href="{{ url_for('admin_dashboard') }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">الأنشطة</a>
+<a href="{{ url_for('admin_logout') }}" class="text-sm text-muted hover:text-danger px-3 py-2 rounded-lg">خروج</a>
+{% endblock %}
+
 {% block content %}
 <section class="max-w-2xl mx-auto px-4">
   <div class="mb-6">
@@ -86,7 +91,7 @@
               class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3 rounded-xl shadow-card">
         حفظ النشاط وإنشاء QR
       </button>
-      <a href="{{ url_for('home') }}"
+      <a href="{{ url_for('admin_dashboard') }}"
          class="bg-white hover:bg-slate-50 text-ink font-semibold px-6 py-3 rounded-xl border border-slate-200">
         إلغاء
       </a>

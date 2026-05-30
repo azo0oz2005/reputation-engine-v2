@@ -86,6 +86,13 @@ def ensure_schema():
         ).all():
             biz.access_code = generate_access_code()
         db.session.commit()
+    if "is_active" not in existing:
+        with db.engine.begin() as conn:
+            conn.execute(text("ALTER TABLE businesses ADD COLUMN is_active BOOLEAN"))
+        # الأنشطة القديمة تُعتبر مفعّلة افتراضيًا
+        for biz in Business.query.filter(Business.is_active.is_(None)).all():
+            biz.is_active = True
+        db.session.commit()
 
 
 def slugify(value: str) -> str:
@@ -177,7 +184,7 @@ def register_routes(app: Flask):
     @app.route("/admin/login", methods=["GET", "POST"])
     def admin_login():
         if session.get("admin_auth"):
-            return redirect(url_for("admin_add_business"))
+            return redirect(url_for("admin_dashboard"))
 
         if request.method == "POST":
             code = (request.form.get("admin_code") or "").strip()
@@ -188,7 +195,7 @@ def register_routes(app: Flask):
                 )
             elif code == ADMIN_CODE:
                 session["admin_auth"] = True
-                return redirect(url_for("admin_add_business"))
+                return redirect(url_for("admin_dashboard"))
             else:
                 flash("رمز الإدارة غير صحيح.", "error")
 
@@ -199,6 +206,87 @@ def register_routes(app: Flask):
         session.pop("admin_auth", None)
         flash("تم تسجيل الخروج من لوحة الإدارة.", "success")
         return redirect(url_for("admin_login"))
+
+    @app.route("/admin")
+    @app.route("/admin/dashboard")
+    def admin_dashboard():
+        if not session.get("admin_auth"):
+            return redirect(url_for("admin_login"))
+
+        businesses = Business.query.order_by(Business.created_at.desc()).all()
+        rows = []
+        for b in businesses:
+            total = Feedback.query.filter_by(business_id=b.id).count()
+            avg = (
+                db.session.query(func.avg(Feedback.rating))
+                .filter(Feedback.business_id == b.id)
+                .scalar()
+            )
+            google_clicks = Feedback.query.filter_by(
+                business_id=b.id, clicked_google=True
+            ).count()
+            complaints = Feedback.query.filter(
+                Feedback.business_id == b.id,
+                Feedback.comment.isnot(None),
+                Feedback.comment != "",
+            ).count()
+            rows.append(
+                {
+                    "business": b,
+                    "total": total,
+                    "avg": round(float(avg or 0), 2),
+                    "google_clicks": google_clicks,
+                    "complaints": complaints,
+                }
+            )
+
+        totals = {
+            "businesses": len(businesses),
+            "active": sum(1 for b in businesses if b.is_active),
+            "paused": sum(1 for b in businesses if not b.is_active),
+            "feedback": sum(r["total"] for r in rows),
+        }
+
+        return render_template("admin_dashboard.html", rows=rows, totals=totals)
+
+    @app.route("/admin/business/<slug>/toggle", methods=["POST"])
+    def admin_toggle_business(slug):
+        if not session.get("admin_auth"):
+            return redirect(url_for("admin_login"))
+        business = Business.query.filter_by(slug=slug).first()
+        if business is None:
+            abort(404)
+        business.is_active = not business.is_active
+        db.session.commit()
+        state = "تشغيل" if business.is_active else "إيقاف"
+        flash(f'تم {state} خدمة "{business.name}".', "success")
+        return redirect(url_for("admin_dashboard"))
+
+    @app.route("/admin/business/<slug>/delete", methods=["POST"])
+    def admin_delete_business(slug):
+        if not session.get("admin_auth"):
+            return redirect(url_for("admin_login"))
+        business = Business.query.filter_by(slug=slug).first()
+        if business is None:
+            abort(404)
+        # تأكيد إضافي: لازم يكتب اسم النشاط بالضبط
+        confirm = (request.form.get("confirm_name") or "").strip()
+        if confirm != business.name:
+            flash("لم يتم الحذف: تأكد من كتابة اسم النشاط بشكل صحيح للتأكيد.", "error")
+            return redirect(url_for("admin_dashboard"))
+
+        name = business.name
+        # حذف ملفات الشعار والـ QR من القرص
+        for rel in (business.logo_path, business.qr_code_path):
+            if rel:
+                try:
+                    os.remove(os.path.join(DATA_DIR, rel))
+                except OSError:
+                    pass
+        db.session.delete(business)  # يحذف التقييمات المرتبطة تلقائيًا (cascade)
+        db.session.commit()
+        flash(f'تم حذف "{name}" وكل بياناته نهائيًا.', "success")
+        return redirect(url_for("admin_dashboard"))
 
     @app.route("/admin/add", methods=["GET", "POST"])
     def admin_add_business():
@@ -294,6 +382,10 @@ def register_routes(app: Flask):
         business = Business.query.filter_by(slug=slug).first()
         if business is None:
             abort(404)
+
+        # إذا كانت الخدمة موقوفة من الإدارة، لا تستقبل تقييمات
+        if not business.is_active:
+            return render_template("paused.html", business=business)
 
         if request.method == "POST":
             raw_rating = request.form.get("rating")

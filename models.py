@@ -18,6 +18,7 @@ class Business(db.Model):
     logo_path = db.Column(db.String(300), nullable=True)
     qr_code_path = db.Column(db.String(300), nullable=True)
     access_code = db.Column(db.String(12), nullable=True)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     feedbacks = db.relationship(
