@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}الإعدادات · {{ business.name }}{% endblock %}
+{% block header_nav %}
+<a href="{{ url_for('dashboard', slug=business.slug) }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">لوحتي</a>
+<a href="{{ url_for('dashboard_logout', slug=business.slug) }}" class="text-sm text-muted hover:text-danger px-3 py-2 rounded-lg">خروج</a>
+{% endblock %}
+
+{% macro toggle(name, label, desc, checked) %}
+<label class="flex items-start gap-3 p-3 rounded-xl border border-slate-100 bg-surface cursor-pointer">
+  <input type="checkbox" name="{{ name }}" {% if checked %}checked{% endif %} class="mt-1 w-5 h-5 accent-brand-600">
+  <span>
+    <span class="block font-semibold text-ink text-sm">{{ label }}</span>
+    <span class="block text-xs text-muted mt-0.5">{{ desc }}</span>
+  </span>
+</label>
+{% endmacro %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto px-4">
+  {% set active = 'settings' %}
+  {% include "_dash_nav.html" %}
+
+  <h1 class="text-2xl font-extrabold text-ink mb-1">إعدادات صفحة النشاط</h1>
+  <p class="text-muted text-sm mb-6">خصّص صفحتك واختر الميزات اللي تظهر للعملاء.</p>
+
+  <form method="POST" class="space-y-5">
+
+    <!-- الميزات -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <h2 class="font-bold text-ink mb-3">🧩 الميزات الظاهرة في صفحتك</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {{ toggle('menu_enabled', 'المنيو الرقمي', 'عرض الأصناف والأسعار', business.menu_enabled) }}
+        {{ toggle('offers_enabled', 'العروض', 'لوحة العروض والإعلانات', business.offers_enabled) }}
+        {{ toggle('reservations_enabled', 'الحجوزات', 'استقبال طلبات الحجز', business.reservations_enabled) }}
+        {{ toggle('loyalty_enabled', 'بطاقة الولاء', 'برنامج الأختام والمكافآت', business.loyalty_enabled) }}
+        {{ toggle('wifi_enabled', 'واي فاي', 'مشاركة الشبكة عبر QR', business.wifi_enabled) }}
+      </div>
+    </div>
+
+    <!-- الهوية -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 space-y-4">
+      <h2 class="font-bold text-ink">🎨 الهوية والنصوص</h2>
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-1">اللون الأساسي</label>
+        <div class="flex items-center gap-3">
+          <input name="brand_color" type="color" value="{{ business.color }}" class="w-14 h-11 rounded-lg border border-slate-200 cursor-pointer">
+          <span class="text-sm text-muted" dir="ltr">{{ business.color }}</span>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-1">نبذة عن النشاط</label>
+        <textarea name="about" rows="2" placeholder="جملة تعريفية تظهر في صفحتك"
+                  class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none">{{ business.about or '' }}</textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-1">نص صفحة التقييم</label>
+        <input name="welcome_message" type="text" value="{{ business.welcome_message or '' }}" placeholder="كيف كانت تجربتك اليوم؟"
+               class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-1">نص صفحة العميل الراضي</label>
+        <input name="happy_message" type="text" value="{{ business.happy_message or '' }}" placeholder="تقييمك على Google يساعدنا نوصل لعملاء أكثر"
+               class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+    </div>
+
+    <!-- التواصل والموقع -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 space-y-4">
+      <h2 class="font-bold text-ink">📞 التواصل والروابط</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">واتساب (للطلب/التواصل)</label>
+          <input name="whatsapp" type="tel" value="{{ business.whatsapp or '' }}" placeholder="05xxxxxxxx"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">رابط الموقع (خرائط)</label>
+          <input name="location_url" type="url" value="{{ business.location_url or '' }}" placeholder="https://maps.app.goo.gl/..."
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">إنستقرام</label>
+          <input name="instagram_url" type="url" value="{{ business.instagram_url or '' }}" placeholder="https://instagram.com/..."
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">سناب شات</label>
+          <input name="snapchat_url" type="url" value="{{ business.snapchat_url or '' }}" placeholder="https://snapchat.com/add/..."
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">تيك توك</label>
+          <input name="tiktok_url" type="url" value="{{ business.tiktok_url or '' }}" placeholder="https://tiktok.com/@..."
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">X (تويتر)</label>
+          <input name="x_url" type="url" value="{{ business.x_url or '' }}" placeholder="https://x.com/..."
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+      </div>
+    </div>
+
+    <!-- واي فاي -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 space-y-4">
+      <h2 class="font-bold text-ink">📶 الواي فاي</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">اسم الشبكة (SSID)</label>
+          <input name="wifi_ssid" type="text" value="{{ business.wifi_ssid or '' }}"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">كلمة المرور</label>
+          <input name="wifi_password" type="text" value="{{ business.wifi_password or '' }}"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">نوع الحماية</label>
+          <select name="wifi_encryption" class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="WPA" {% if business.wifi_encryption in (None,'WPA') %}selected{% endif %}>WPA/WPA2</option>
+            <option value="WEP" {% if business.wifi_encryption=='WEP' %}selected{% endif %}>WEP</option>
+            <option value="NOPASS" {% if business.wifi_encryption=='NOPASS' %}selected{% endif %}>بدون كلمة مرور</option>
+          </select>
+        </div>
+      </div>
+      {% if business.wifi_qr_path %}
+        <div class="flex items-center gap-3">
+          <img src="{{ url_for('media', filename=business.wifi_qr_path) }}" class="w-20 h-20 object-contain border border-slate-100 rounded-xl">
+          <p class="text-xs text-muted">رمز الواي فاي الحالي. يتحدّث عند الحفظ.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="flex gap-3">
+      <button class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-8 py-3 rounded-xl shadow-card">حفظ الإعدادات</button>
+      <a href="{{ url_for('hub', slug=business.slug) }}" target="_blank"
+         class="bg-white border border-slate-200 text-ink font-semibold px-6 py-3 rounded-xl">معاينة الصفحة ↗</a>
+    </div>
+
+  </form>
+</section>
+{% endblock %}

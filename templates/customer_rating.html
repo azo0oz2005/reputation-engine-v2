@@ -20,7 +20,7 @@
       <p class="text-sm text-muted mt-1">{{ business.category }}</p>
     </div>
 
-    <h2 class="text-lg md:text-xl font-bold text-ink mb-2">كيف كانت تجربتك اليوم؟</h2>
+    <h2 class="text-lg md:text-xl font-bold text-ink mb-2">{{ business.welcome_message or 'كيف كانت تجربتك اليوم؟' }}</h2>
     <p class="text-sm text-muted mb-8">يستغرق أقل من 10 ثواني</p>
 
     <form method="POST" action="{{ url_for('customer_rating', slug=business.slug) }}" class="space-y-3">

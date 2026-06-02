@@ -1,0 +1,22 @@
+{# شريط تنقّل لوحة التحكم — يتطلّب متغيّر business و active #}
+<div class="bg-white border border-slate-100 rounded-2xl shadow-soft p-2 mb-6 flex items-center gap-1 overflow-x-auto">
+  {% set tabs = [
+    ('dashboard', 'لوحة التحكم', '📊'),
+    ('manage_menu', 'المنيو', '📋'),
+    ('manage_offers', 'العروض', '🎁'),
+    ('manage_reservations', 'الحجوزات', '🗓️'),
+    ('manage_loyalty', 'الولاء', '🎫'),
+    ('settings', 'الإعدادات', '⚙️'),
+  ] %}
+  {% for endpoint, label, icon in tabs %}
+    <a href="{{ url_for(endpoint, slug=business.slug) }}"
+       class="whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl transition
+              {% if active == endpoint %}bg-brand-600 text-white shadow-soft{% else %}text-muted hover:bg-surface hover:text-ink{% endif %}">
+      <span class="ml-1">{{ icon }}</span>{{ label }}
+    </a>
+  {% endfor %}
+  <a href="{{ url_for('hub', slug=business.slug) }}" target="_blank"
+     class="whitespace-nowrap text-sm font-semibold px-4 py-2 rounded-xl text-brand-700 hover:bg-brand-50 mr-auto">
+    👁️ معاينة الصفحة
+  </a>
+</div>

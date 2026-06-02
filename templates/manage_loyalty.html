@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}بطاقة الولاء · {{ business.name }}{% endblock %}
+{% block header_nav %}
+<a href="{{ url_for('dashboard', slug=business.slug) }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">لوحتي</a>
+<a href="{{ url_for('dashboard_logout', slug=business.slug) }}" class="text-sm text-muted hover:text-danger px-3 py-2 rounded-lg">خروج</a>
+{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4">
+  {% set active = 'manage_loyalty' %}
+  {% include "_dash_nav.html" %}
+
+  <h1 class="text-2xl font-extrabold text-ink mb-1">بطاقة الولاء</h1>
+  <p class="text-muted text-sm mb-6">
+    {% if not business.loyalty_enabled %}
+      البطاقة غير مفعّلة — فعّلها من <a href="{{ url_for('settings', slug=business.slug) }}" class="text-brand-700 underline">الإعدادات</a> لتظهر للعملاء.
+    {% else %}
+      العميل يجمع أختام بكل زيارة (يضيفها الموظف برقم الجوال) ويستبدلها بمكافأة.
+    {% endif %}
+  </p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+    <!-- الإعدادات -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <h2 class="font-bold text-ink mb-3">⚙️ إعدادات البطاقة</h2>
+      <form method="POST" class="space-y-3">
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">عدد الأختام للمكافأة</label>
+          <input name="loyalty_goal" type="number" min="1" max="50" value="{{ business.loyalty_goal or 8 }}"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">المكافأة</label>
+          <input name="loyalty_reward" type="text" value="{{ business.loyalty_reward or '' }}" placeholder="مثال: مشروب مجاني"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">رمز الموظف (PIN)</label>
+          <input name="staff_pin" type="text" inputmode="numeric" value="{{ business.staff_pin or '' }}"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 tracking-[0.3em]" dir="ltr">
+          <p class="text-xs text-muted mt-1">يستخدمه الموظف لإضافة الأختام. غيّره إذا تسرّب.</p>
+        </div>
+        <button class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl">حفظ</button>
+      </form>
+    </div>
+
+    <!-- محطة الموظف -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <h2 class="font-bold text-ink mb-3">🧾 محطة الموظف</h2>
+      <p class="text-sm text-muted mb-3 leading-relaxed">افتح هذا الرابط على جهاز الكاشير لإضافة الأختام بسرعة (يطلب رمز الموظف):</p>
+      <div class="flex items-center gap-2 bg-surface rounded-xl border border-slate-200 px-3 py-2 mb-3">
+        <input type="text" readonly value="{{ staff_url }}" onclick="this.select()"
+               class="flex-1 bg-transparent text-xs text-ink outline-none" dir="ltr">
+      </div>
+      <a href="{{ staff_url }}" target="_blank"
+         class="inline-block bg-white border border-slate-200 text-ink font-semibold px-5 py-2.5 rounded-xl">فتح المحطة ↗</a>
+    </div>
+  </div>
+
+  <!-- الأعضاء -->
+  <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+    <h2 class="font-bold text-ink mb-3">العملاء ({{ members|length }})</h2>
+    {% if members %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-muted text-xs border-b border-slate-100">
+            <th class="text-right py-2 font-semibold">العميل</th>
+            <th class="text-right py-2 font-semibold">الجوال</th>
+            <th class="text-center py-2 font-semibold">الأختام</th>
+            <th class="text-center py-2 font-semibold">مكافآت مستبدلة</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set goal = business.loyalty_goal or 8 %}
+          {% for m in members %}
+          <tr class="border-b border-slate-50">
+            <td class="py-2 text-ink">{{ m.name or '—' }}</td>
+            <td class="py-2 text-muted" dir="ltr">{{ m.phone }}</td>
+            <td class="py-2 text-center">
+              <span class="font-bold {% if m.stamps >= goal %}text-brand-600{% else %}text-ink{% endif %}">{{ m.stamps }}/{{ goal }}</span>
+            </td>
+            <td class="py-2 text-center text-muted">{{ m.rewards_redeemed }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted text-sm">لا يوجد عملاء في البرنامج بعد.</p>
+    {% endif %}
+  </div>
+
+</section>
+{% endblock %}

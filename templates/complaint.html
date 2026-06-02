@@ -19,6 +19,19 @@
     <form method="POST" action="{{ url_for('complaint', feedback_id=feedback.id) }}" class="space-y-4">
 
       <div>
+        <label class="block text-sm font-semibold text-ink mb-2">وش الجانب اللي تحب نطوّره؟ <span class="text-muted font-normal">(اختياري)</span></label>
+        <div class="flex flex-wrap gap-2">
+          {% set cats = [('taste','الطعم/الجودة'),('service','الخدمة'),('cleanliness','النظافة'),('price','الأسعار'),('speed','السرعة'),('other','أخرى')] %}
+          {% for key, label in cats %}
+          <label class="cursor-pointer">
+            <input type="radio" name="category" value="{{ key }}" class="peer sr-only">
+            <span class="block px-3 py-2 rounded-xl border border-slate-200 text-sm text-muted peer-checked:bg-brand-50 peer-checked:border-brand-300 peer-checked:text-brand-700 peer-checked:font-semibold">{{ label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div>
         <label for="comment" class="block text-sm font-semibold text-ink mb-2">ملاحظتك *</label>
         <textarea id="comment" name="comment" rows="5" required
                   placeholder="اكتب لنا تفاصيل تجربتك..."

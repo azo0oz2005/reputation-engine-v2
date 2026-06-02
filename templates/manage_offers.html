@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}العروض · {{ business.name }}{% endblock %}
+{% block header_nav %}
+<a href="{{ url_for('dashboard', slug=business.slug) }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">لوحتي</a>
+<a href="{{ url_for('dashboard_logout', slug=business.slug) }}" class="text-sm text-muted hover:text-danger px-3 py-2 rounded-lg">خروج</a>
+{% endblock %}
+
+{% block content %}
+<section class="max-w-3xl mx-auto px-4">
+  {% set active = 'manage_offers' %}
+  {% include "_dash_nav.html" %}
+
+  <h1 class="text-2xl font-extrabold text-ink mb-1">العروض والإعلانات</h1>
+  <p class="text-muted text-sm mb-6">العروض الفعّالة تظهر أعلى صفحة نشاطك للعملاء.</p>
+
+  <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 mb-6">
+    <h2 class="font-bold text-ink mb-3">➕ عرض جديد</h2>
+    <form method="POST" action="{{ url_for('add_offer', slug=business.slug) }}" class="space-y-3">
+      <div class="flex gap-2">
+        <input name="emoji" type="text" value="🎁" maxlength="2"
+               class="w-16 text-center text-xl border border-slate-200 rounded-xl px-2 py-2.5">
+        <input name="title" type="text" required placeholder="عنوان العرض — مثال: خصم ٢٠٪ على القهوة المختصة"
+               class="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+      <input name="description" type="text" placeholder="تفاصيل إضافية (اختياري)"
+             class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      <button class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-2.5 rounded-xl">نشر العرض</button>
+    </form>
+  </div>
+
+  {% if offers %}
+  <div class="space-y-3">
+    {% for o in offers %}
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex items-start gap-3 {% if not o.is_active %}opacity-60{% endif %}">
+      <div class="text-2xl shrink-0">{{ o.emoji or '🎁' }}</div>
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-ink">{{ o.title }}
+          {% if not o.is_active %}<span class="text-xs text-muted font-normal">(موقوف)</span>{% endif %}</p>
+        {% if o.description %}<p class="text-sm text-muted mt-0.5">{{ o.description }}</p>{% endif %}
+      </div>
+      <div class="flex items-center gap-1 shrink-0">
+        <form method="POST" action="{{ url_for('toggle_offer', slug=business.slug, oid=o.id) }}">
+          <button class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg">{{ 'إيقاف' if o.is_active else 'تفعيل' }}</button>
+        </form>
+        <form method="POST" action="{{ url_for('delete_offer', slug=business.slug, oid=o.id) }}"
+              onsubmit="return confirm('حذف العرض؟');">
+          <button class="text-xs bg-white border border-red-100 text-danger px-3 py-1.5 rounded-lg">🗑</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-10 text-center text-muted">
+    ما عندك عروض حاليًا. أضف أول عرض من الأعلى.
+  </div>
+  {% endif %}
+
+</section>
+{% endblock %}

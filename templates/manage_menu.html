@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block title %}إدارة المنيو · {{ business.name }}{% endblock %}
+{% block header_nav %}
+<a href="{{ url_for('dashboard', slug=business.slug) }}" class="text-sm text-muted hover:text-ink px-3 py-2 rounded-lg">لوحتي</a>
+<a href="{{ url_for('dashboard_logout', slug=business.slug) }}" class="text-sm text-muted hover:text-danger px-3 py-2 rounded-lg">خروج</a>
+{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4">
+  {% set active = 'manage_menu' %}
+  {% include "_dash_nav.html" %}
+
+  <h1 class="text-2xl font-extrabold text-ink mb-1">إدارة المنيو</h1>
+  <p class="text-muted text-sm mb-6">أضف أقسام وأصناف بأسعار وصور — وتظهر مباشرة في صفحة نشاطك.</p>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
+    <!-- إضافة قسم -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <h2 class="font-bold text-ink mb-3">➕ إضافة قسم</h2>
+      <form method="POST" action="{{ url_for('add_category', slug=business.slug) }}" class="flex gap-2">
+        <input name="name" type="text" required placeholder="مثال: مشروبات ساخنة"
+               class="flex-1 border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <button class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 rounded-xl">إضافة</button>
+      </form>
+    </div>
+
+    <!-- إضافة صنف -->
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <h2 class="font-bold text-ink mb-3">➕ إضافة صنف</h2>
+      <form method="POST" action="{{ url_for('add_item', slug=business.slug) }}" enctype="multipart/form-data" class="space-y-3">
+        <input name="name" type="text" required placeholder="اسم الصنف"
+               class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <div class="grid grid-cols-2 gap-2">
+          <input name="price" type="number" step="0.01" min="0" placeholder="السعر (﷼)"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500" dir="ltr">
+          <select name="category_id" class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="">بدون قسم</option>
+            {% for cat in categories %}<option value="{{ cat.id }}">{{ cat.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <input name="description" type="text" placeholder="وصف مختصر (اختياري)"
+               class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <input name="image" type="file" accept="image/png,image/jpeg,image/webp"
+               class="block w-full text-sm text-muted file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-brand-100 file:text-brand-700 file:font-semibold">
+        <button class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl">حفظ الصنف</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- الأقسام والأصناف -->
+  {% macro item_row(item) %}
+  <div class="border border-slate-100 rounded-xl p-3 bg-surface">
+    <div class="flex items-center gap-3">
+      {% if item.image_path %}
+        <img src="{{ url_for('media', filename=item.image_path) }}" class="w-12 h-12 rounded-lg object-cover shrink-0">
+      {% endif %}
+      <div class="flex-1 min-w-0">
+        <p class="font-bold text-ink truncate">{{ item.name }}
+          {% if not item.is_available %}<span class="text-xs text-danger font-normal">(مخفي)</span>{% endif %}</p>
+        {% if item.price is not none %}<p class="text-sm text-brand-700 font-bold">{{ '%g'|format(item.price) }} ﷼</p>{% endif %}
+      </div>
+      <div class="flex items-center gap-1 shrink-0">
+        <button type="button" onclick="document.getElementById('edit-{{ item.id }}').classList.toggle('hidden')"
+                class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg">✎ تعديل</button>
+        <form method="POST" action="{{ url_for('toggle_item', slug=business.slug, iid=item.id) }}" class="inline">
+          <button class="text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-lg">{{ 'إخفاء' if item.is_available else 'إظهار' }}</button>
+        </form>
+        <form method="POST" action="{{ url_for('delete_item', slug=business.slug, iid=item.id) }}" class="inline"
+              onsubmit="return confirm('حذف {{ item.name|e }}؟');">
+          <button class="text-xs bg-white border border-red-100 text-danger px-3 py-1.5 rounded-lg">🗑</button>
+        </form>
+      </div>
+    </div>
+    <!-- نموذج التعديل -->
+    <form id="edit-{{ item.id }}" method="POST" action="{{ url_for('edit_item', slug=business.slug, iid=item.id) }}"
+          enctype="multipart/form-data" class="hidden mt-3 pt-3 border-t border-slate-200 grid grid-cols-2 gap-2">
+      <input name="name" value="{{ item.name }}" class="col-span-2 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+      <input name="price" type="number" step="0.01" value="{{ '%g'|format(item.price) if item.price is not none else '' }}" placeholder="السعر" class="border border-slate-200 rounded-lg px-3 py-2 text-sm" dir="ltr">
+      <select name="category_id" class="border border-slate-200 rounded-lg px-3 py-2 text-sm bg-white">
+        <option value="">بدون قسم</option>
+        {% for cat in categories %}<option value="{{ cat.id }}" {% if item.category_id == cat.id %}selected{% endif %}>{{ cat.name }}</option>{% endfor %}
+      </select>
+      <input name="description" value="{{ item.description or '' }}" placeholder="الوصف" class="col-span-2 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+      <input name="image" type="file" accept="image/png,image/jpeg,image/webp" class="col-span-2 text-xs text-muted">
+      <button class="col-span-2 bg-brand-600 text-white font-bold py-2 rounded-lg text-sm">حفظ التعديل</button>
+    </form>
+  </div>
+  {% endmacro %}
+
+  <div class="space-y-4">
+    {% for cat in categories %}
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-extrabold text-ink">{{ cat.name }} <span class="text-sm text-muted font-normal">({{ cat.items|length }})</span></h2>
+        <form method="POST" action="{{ url_for('delete_category', slug=business.slug, cid=cat.id) }}"
+              onsubmit="return confirm('حذف القسم {{ cat.name|e }} وكل أصنافه؟');">
+          <button class="text-xs text-danger hover:underline">حذف القسم</button>
+        </form>
+      </div>
+      {% if cat.items %}
+        <div class="space-y-2">
+          {% for item in cat.items|sort(attribute='sort_order') %}{{ item_row(item) }}{% endfor %}
+        </div>
+      {% else %}
+        <p class="text-sm text-muted">لا توجد أصناف في هذا القسم بعد.</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    {% if uncategorized %}
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5">
+      <h2 class="font-extrabold text-ink mb-3">أصناف بدون قسم</h2>
+      <div class="space-y-2">
+        {% for item in uncategorized %}{{ item_row(item) }}{% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if not categories and not uncategorized %}
+    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-10 text-center text-muted">
+      ابدأ بإضافة قسم وصنف من الأعلى.
+    </div>
+    {% endif %}
+  </div>
+
+</section>
+{% endblock %}

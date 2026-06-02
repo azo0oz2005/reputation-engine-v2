@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}بطاقة الولاء · {{ business.name }}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+{% set c = business.color %}
+{% set goal = business.loyalty_goal or 8 %}
+<section class="max-w-md mx-auto px-4 py-6">
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 px-6 py-8">
+
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl text-white text-3xl mb-3" style="background:{{ c }}">🎫</div>
+      <h1 class="text-xl font-extrabold text-ink">بطاقة ولاء {{ business.name }}</h1>
+      <p class="text-sm text-muted mt-1">اجمع {{ goal }} أختام واحصل على: <span class="font-bold text-ink">{{ business.loyalty_reward or 'مكافأة' }}</span></p>
+    </div>
+
+    <form method="POST" class="flex gap-2 mb-6">
+      <input name="phone" type="tel" dir="ltr" placeholder="05xxxxxxxx" required
+             class="flex-1 border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      <button type="submit" class="text-white font-bold px-5 rounded-xl" style="background:{{ c }}">اعرض</button>
+    </form>
+
+    {% if searched %}
+      {% if member %}
+        {% set remaining = goal - (member.stamps % goal if member.stamps >= goal else member.stamps) %}
+        <div class="text-center mb-4">
+          {% if member.stamps >= goal %}
+            <p class="font-extrabold text-lg" style="color:{{ c }}">🎉 جاهز للاستبدال! عندك {{ member.stamps }} ختم</p>
+            <p class="text-sm text-muted mt-1">اعرض هذه الصفحة للكاشير لاستلام مكافأتك</p>
+          {% else %}
+            <p class="font-extrabold text-lg text-ink">عندك {{ member.stamps }} من {{ goal }} أختام</p>
+            <p class="text-sm text-muted mt-1">باقي {{ goal - member.stamps }} أختام على المكافأة</p>
+          {% endif %}
+        </div>
+        <div class="grid grid-cols-4 gap-2">
+          {% for i in range(goal) %}
+            {% if i < (member.stamps % goal if member.stamps > goal else member.stamps) or (member.stamps >= goal and member.stamps % goal == 0) %}
+              <div class="aspect-square rounded-xl flex items-center justify-center text-white text-xl" style="background:{{ c }}">★</div>
+            {% else %}
+              <div class="aspect-square rounded-xl flex items-center justify-center text-slate-300 text-xl bg-slate-50 border border-dashed border-slate-200">★</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% if member.rewards_redeemed %}
+          <p class="text-center text-xs text-muted mt-4">استبدلت {{ member.rewards_redeemed }} مكافأة سابقًا 🏆</p>
+        {% endif %}
+      {% else %}
+        <div class="text-center py-6">
+          <p class="text-muted mb-2">ما لقينا بطاقة بهذا الرقم.</p>
+          <p class="text-sm text-slate-500">اطلب من الكاشير يضيف لك أول ختم في زيارتك القادمة 😊</p>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="bg-surface rounded-2xl p-5 text-sm text-slate-600 leading-loose">
+        <p class="font-semibold text-ink mb-1">كيف تشتغل؟</p>
+        كل زيارة = ختم. تجمع {{ goal }} أختام وتحصل على {{ business.loyalty_reward or 'مكافأتك' }}. أدخل رقم جوالك فوق عشان تشوف رصيدك.
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

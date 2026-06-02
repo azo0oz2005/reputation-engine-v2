@@ -12,7 +12,7 @@
 
     <h1 class="text-2xl font-extrabold text-ink mb-3">سعداء أن تجربتك كانت ممتازة</h1>
     <p class="text-muted leading-loose mb-8">
-      تقييمك على Google يساعدنا نوصل لعملاء أكثر، ويأخذ منك أقل من دقيقة.
+      {{ business.happy_message or 'تقييمك على Google يساعدنا نوصل لعملاء أكثر، ويأخذ منك أقل من دقيقة.' }}
     </p>
 
     <a href="{{ url_for('go_google', feedback_id=feedback.id) }}"

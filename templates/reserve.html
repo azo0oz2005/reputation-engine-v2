@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}حجز · {{ business.name }}{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+{% set c = business.color %}
+<section class="max-w-md mx-auto px-4 py-6">
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 px-6 py-8">
+
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl text-white text-3xl mb-3" style="background:{{ c }}">🗓️</div>
+      <h1 class="text-xl font-extrabold text-ink">طلب حجز في {{ business.name }}</h1>
+      <p class="text-sm text-muted mt-1">عبّي بياناتك وراح نتواصل معك للتأكيد</p>
+    </div>
+
+    <form method="POST" class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-2">الاسم *</label>
+        <input name="customer_name" type="text" required
+               class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-2">رقم الجوال *</label>
+        <input name="customer_phone" type="tel" required dir="ltr" placeholder="05xxxxxxxx"
+               class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-2">عدد الأشخاص</label>
+          <input name="party_size" type="number" min="1" placeholder="4"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-2">الوقت المفضّل</label>
+          <input name="requested_time" type="text" placeholder="اليوم ٩م"
+                 class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-2">ملاحظة <span class="text-muted font-normal">(اختياري)</span></label>
+        <textarea name="note" rows="2"
+                  class="w-full border border-slate-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"></textarea>
+      </div>
+      <button type="submit" class="w-full text-white font-bold py-4 rounded-2xl text-lg shadow-card" style="background:{{ c }}">
+        إرسال طلب الحجز
+      </button>
+    </form>
+  </div>
+</section>
+{% endblock %}
