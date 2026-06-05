@@ -4,103 +4,120 @@
 
 {% block content %}
 {% set c = business.color %}
-<section class="max-w-md mx-auto px-4 py-4">
+<section class="max-w-md mx-auto px-4 py-5">
 
-  <!-- ترويسة النشاط -->
-  <div class="bg-white rounded-3xl shadow-card border border-slate-100 overflow-hidden mb-4">
-    <div class="h-20" style="background: linear-gradient(135deg, {{ c }}, {{ c }}cc);"></div>
-    <div class="px-6 pb-6 -mt-12 text-center">
-      {% if business.logo_path %}
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl overflow-hidden bg-white border-4 border-white shadow-soft">
-          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-cover">
-        </div>
-      {% else %}
-        <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl text-white text-3xl font-extrabold border-4 border-white shadow-soft" style="background:{{ c }}">
-          {{ business.name[:1] }}
-        </div>
-      {% endif %}
-      <h1 class="text-2xl font-extrabold text-ink mt-3">{{ business.name }}</h1>
-      <p class="text-sm text-muted mt-1">{{ business.category }}</p>
-      {% if business.about %}
-        <p class="text-sm text-slate-600 mt-3 leading-loose">{{ business.about }}</p>
-      {% endif %}
+  <!-- بطاقة الترويسة الفخمة -->
+  <div class="relative rounded-[28px] overflow-hidden shadow-card mb-5">
+    <div class="px-6 pt-10 pb-16 text-center relative"
+         style="background: radial-gradient(120% 120% at 50% 0%, {{ c }} 0%, {{ c }}d9 55%, {{ c }}b3 100%);">
+      <!-- زخرفة خفيفة -->
+      <div class="absolute inset-0 opacity-10"
+           style="background-image: radial-gradient(circle at 20% 20%, #fff 1px, transparent 1px), radial-gradient(circle at 70% 60%, #fff 1px, transparent 1px); background-size: 26px 26px;"></div>
+      <div class="relative">
+        {% if business.logo_path %}
+          <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl overflow-hidden bg-white shadow-lg ring-4 ring-white/40">
+            <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-2">
+          </div>
+        {% else %}
+          <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl bg-white text-3xl font-extrabold shadow-lg ring-4 ring-white/40" style="color:{{ c }}">
+            {{ business.name[:1] }}
+          </div>
+        {% endif %}
+        <h1 class="text-2xl font-extrabold text-white mt-4 drop-shadow-sm">{{ business.name }}</h1>
+        <p class="text-sm text-white/85 mt-1">{{ business.category }}</p>
+      </div>
     </div>
+    <!-- شريط النبذة المتداخل -->
+    {% if business.about %}
+    <div class="bg-white px-6 py-4 -mt-8 mx-4 rounded-2xl shadow-soft border border-slate-100 relative text-center">
+      <p class="text-sm text-slate-600 leading-loose">{{ business.about }}</p>
+    </div>
+    {% endif %}
   </div>
 
   <!-- العروض -->
   {% if business.offers_enabled and offers %}
-  <div class="space-y-2 mb-4">
-    {% for o in offers %}
-    <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex items-start gap-3">
-      <div class="text-2xl shrink-0">{{ o.emoji or '🎁' }}</div>
-      <div>
-        <p class="font-bold text-ink">{{ o.title }}</p>
-        {% if o.description %}<p class="text-sm text-muted mt-0.5 leading-relaxed">{{ o.description }}</p>{% endif %}
+  <div class="mb-5">
+    <p class="text-xs font-bold text-muted mb-2 px-1">✨ عروضنا</p>
+    <div class="space-y-2">
+      {% for o in offers %}
+      <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:{{ c }}1a">{{ o.emoji or '🎁' }}</div>
+        <div>
+          <p class="font-bold text-ink leading-tight">{{ o.title }}</p>
+          {% if o.description %}<p class="text-sm text-muted mt-0.5 leading-relaxed">{{ o.description }}</p>{% endif %}
+        </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
   {% endif %}
 
-  <!-- الأزرار الرئيسية -->
+  <!-- زر التقييم البارز -->
+  <a href="{{ url_for('customer_rating', slug=business.slug) }}"
+     class="block rounded-2xl shadow-card p-5 mb-3 text-center text-white hover:opacity-95 transition relative overflow-hidden"
+     style="background: linear-gradient(135deg, {{ c }}, {{ c }}cc);">
+    <div class="flex items-center justify-center gap-3">
+      <span class="text-3xl">⭐</span>
+      <div class="text-right">
+        <p class="font-extrabold text-lg leading-tight">قيّم تجربتك</p>
+        <p class="text-xs text-white/85">رأيك يهمنا ويأخذ ثواني</p>
+      </div>
+    </div>
+  </a>
+
+  <!-- شبكة الخدمات -->
   <div class="grid grid-cols-2 gap-3">
 
     {% if business.menu_enabled and item_count > 0 %}
     <a href="{{ url_for('public_menu', slug=business.slug) }}"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
-      <div class="text-3xl mb-2">📋</div>
+      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📋</div>
       <p class="font-bold text-ink">المنيو</p>
-      <p class="text-xs text-muted mt-0.5">تصفّح الأصناف والأسعار</p>
+      <p class="text-xs text-muted mt-0.5">{{ item_count }} صنف</p>
     </a>
     {% endif %}
-
-    <a href="{{ url_for('customer_rating', slug=business.slug) }}"
-       class="rounded-2xl shadow-soft p-5 text-center text-white hover:opacity-95 transition" style="background:{{ c }}">
-      <div class="text-3xl mb-2">⭐</div>
-      <p class="font-bold">قيّم تجربتك</p>
-      <p class="text-xs opacity-90 mt-0.5">رأيك يهمنا</p>
-    </a>
 
     {% if business.loyalty_enabled %}
     <a href="{{ url_for('public_loyalty', slug=business.slug) }}"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
-      <div class="text-3xl mb-2">🎫</div>
+      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">🎫</div>
       <p class="font-bold text-ink">بطاقة الولاء</p>
-      <p class="text-xs text-muted mt-0.5">اجمع أختامك واربح</p>
+      <p class="text-xs text-muted mt-0.5">اجمع واربح</p>
     </a>
     {% endif %}
 
     {% if business.reservations_enabled %}
     <a href="{{ url_for('public_reserve', slug=business.slug) }}"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
-      <div class="text-3xl mb-2">🗓️</div>
+      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">🗓️</div>
       <p class="font-bold text-ink">احجز طاولة</p>
-      <p class="text-xs text-muted mt-0.5">اطلب حجزك بسهولة</p>
+      <p class="text-xs text-muted mt-0.5">بسهولة</p>
     </a>
     {% endif %}
 
     {% if business.whatsapp %}
     <a href="https://wa.me/{{ business.whatsapp }}" target="_blank"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
-      <div class="text-3xl mb-2">💬</div>
+      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">💬</div>
       <p class="font-bold text-ink">واتساب</p>
-      <p class="text-xs text-muted mt-0.5">تواصل معنا مباشرة</p>
+      <p class="text-xs text-muted mt-0.5">تواصل معنا</p>
     </a>
     {% endif %}
 
     {% if business.location_url %}
     <a href="{{ business.location_url }}" target="_blank"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
-      <div class="text-3xl mb-2">📍</div>
+      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📍</div>
       <p class="font-bold text-ink">الموقع</p>
-      <p class="text-xs text-muted mt-0.5">الاتجاهات على الخريطة</p>
+      <p class="text-xs text-muted mt-0.5">الاتجاهات</p>
     </a>
     {% endif %}
 
     {% if business.wifi_enabled and business.wifi_ssid %}
     <button onclick="document.getElementById('wifiBox').classList.toggle('hidden')"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
-      <div class="text-3xl mb-2">📶</div>
+      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📶</div>
       <p class="font-bold text-ink">واي فاي</p>
       <p class="text-xs text-muted mt-0.5">اتصل بشبكتنا</p>
     </button>
@@ -116,22 +133,22 @@
     {% endif %}
     <div class="text-sm text-ink space-y-1">
       <p>اسم الشبكة: <span class="font-bold" dir="ltr">{{ business.wifi_ssid }}</span></p>
-      {% if business.wifi_password %}
-        <p>كلمة المرور: <span class="font-bold" dir="ltr">{{ business.wifi_password }}</span></p>
-      {% endif %}
+      {% if business.wifi_password %}<p>كلمة المرور: <span class="font-bold" dir="ltr">{{ business.wifi_password }}</span></p>{% endif %}
     </div>
   </div>
   {% endif %}
 
   <!-- روابط التواصل -->
   {% if business.instagram_url or business.snapchat_url or business.tiktok_url or business.x_url %}
-  <div class="flex items-center justify-center gap-3 mt-5">
+  <div class="flex items-center justify-center gap-3 mt-6">
     {% if business.instagram_url %}<a href="{{ business.instagram_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">📷</a>{% endif %}
     {% if business.snapchat_url %}<a href="{{ business.snapchat_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">👻</a>{% endif %}
     {% if business.tiktok_url %}<a href="{{ business.tiktok_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">🎵</a>{% endif %}
     {% if business.x_url %}<a href="{{ business.x_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">𝕏</a>{% endif %}
   </div>
   {% endif %}
+
+  <p class="text-center text-[11px] text-slate-400 mt-6">بواسطة سمعة برو</p>
 
 </section>
 {% endblock %}

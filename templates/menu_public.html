@@ -3,16 +3,16 @@
 {% block header %}{% endblock %}
 
 {% macro item_card(item, c) %}
-<div class="flex items-start gap-3 py-3 {% if not item.is_available %}opacity-50{% endif %}">
+<div class="flex items-start gap-3 py-3.5 {% if not item.is_available %}opacity-50{% endif %}">
   {% if item.image_path %}
     <img src="{{ url_for('media', filename=item.image_path) }}" alt="{{ item.name }}"
-         class="w-16 h-16 rounded-xl object-cover border border-slate-100 shrink-0">
+         class="w-16 h-16 rounded-2xl object-cover border border-slate-100 shrink-0 shadow-soft">
   {% endif %}
   <div class="flex-1 min-w-0">
     <div class="flex items-baseline justify-between gap-2">
       <p class="font-bold text-ink">{{ item.name }}{% if not item.is_available %} <span class="text-xs text-danger font-normal">(غير متوفر)</span>{% endif %}</p>
       {% if item.price is not none %}
-        <p class="font-extrabold whitespace-nowrap" style="color:{{ c }}">{{ '%g'|format(item.price) }} ﷼</p>
+        <p class="font-extrabold whitespace-nowrap" style="color:{{ c }}">{{ '%g'|format(item.price) }} <span class="text-xs">﷼</span></p>
       {% endif %}
     </div>
     {% if item.description %}<p class="text-sm text-muted mt-0.5 leading-relaxed">{{ item.description }}</p>{% endif %}
@@ -28,12 +28,18 @@
 
 {% block content %}
 {% set c = business.color %}
-<section class="max-w-md mx-auto px-4 py-4">
+<section class="max-w-md mx-auto px-4 py-5">
 
-  <div class="flex items-center justify-between mb-4">
-    <a href="{{ url_for('hub', slug=business.slug) }}" class="text-sm text-muted hover:text-ink">← رجوع</a>
-    <h1 class="font-extrabold text-ink">منيو {{ business.name }}</h1>
-    <span class="w-10"></span>
+  <!-- ترويسة المنيو -->
+  <div class="rounded-3xl overflow-hidden shadow-card mb-5 text-center px-6 py-7 relative"
+       style="background: linear-gradient(135deg, {{ c }}, {{ c }}cc);">
+    <a href="{{ url_for('hub', slug=business.slug) }}" class="absolute top-4 right-4 text-white/80 text-sm">← رجوع</a>
+    {% if business.logo_path %}
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl overflow-hidden bg-white shadow-lg mb-3">
+        <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-1">
+      </div>
+    {% endif %}
+    <h1 class="text-xl font-extrabold text-white">منيو {{ business.name }}</h1>
   </div>
 
   {% set has_any = uncategorized or categories|selectattr('items')|list %}
@@ -46,11 +52,12 @@
   {% for cat in categories %}
     {% if cat.items %}
     <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 mb-3">
-      <h2 class="font-extrabold text-lg mb-1 pb-2 border-b border-slate-100" style="color:{{ c }}">{{ cat.name }}</h2>
+      <div class="flex items-center gap-2 mb-1 pb-3 border-b border-slate-100">
+        <span class="w-1.5 h-5 rounded-full" style="background:{{ c }}"></span>
+        <h2 class="font-extrabold text-lg" style="color:{{ c }}">{{ cat.name }}</h2>
+      </div>
       <div class="divide-y divide-slate-100">
-        {% for item in cat.items|sort(attribute='sort_order') %}
-          {{ item_card(item, c) }}
-        {% endfor %}
+        {% for item in cat.items|sort(attribute='sort_order') %}{{ item_card(item, c) }}{% endfor %}
       </div>
     </div>
     {% endif %}
@@ -59,12 +66,12 @@
   {% if uncategorized %}
   <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 mb-3">
     <div class="divide-y divide-slate-100">
-      {% for item in uncategorized %}
-        {{ item_card(item, c) }}
-      {% endfor %}
+      {% for item in uncategorized %}{{ item_card(item, c) }}{% endfor %}
     </div>
   </div>
   {% endif %}
+
+  <p class="text-center text-[11px] text-slate-400 mt-4">بواسطة سمعة برو</p>
 
 </section>
 {% endblock %}
