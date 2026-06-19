@@ -12,7 +12,7 @@
     <div class="relative h-44">
       {% if business.cover_path %}
         <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover">
-        <div class="absolute inset-0" style="background: linear-gradient(180deg, {{ c }}33 0%, {{ c }}cc 100%);"></div>
+        <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(0,0,0,0) 30%, {{ c }}26 70%, {{ c }}cc 100%);"></div>
       {% else %}
         <div class="absolute inset-0" style="background: radial-gradient(130% 130% at 50% 0%, {{ c }} 0%, {{ c }}d9 55%, {{ c }}aa 100%);"></div>
         <div class="absolute inset-0 opacity-10"
@@ -23,6 +23,22 @@
     <div class="bg-white pt-16 pb-5 px-6 text-center">
       <h1 class="text-[22px] font-extrabold text-ink leading-tight">{{ business.name }}</h1>
       <p class="text-sm text-muted mt-1">{{ business.category }}</p>
+
+      {% if business.google_rating or business.hours_text %}
+      <div class="flex items-center justify-center gap-2 mt-3 flex-wrap">
+        {% if business.google_rating %}
+          <span class="inline-flex items-center gap-1 text-xs font-semibold text-ink bg-amber-50 border border-amber-100 rounded-full px-3 py-1">
+            <span class="text-amber-400">★</span> {{ business.google_rating }}{% if business.review_count %} <span class="text-muted font-normal">· {{ business.review_count }} تقييم</span>{% endif %}
+          </span>
+        {% endif %}
+        {% if business.hours_text %}
+          <span class="inline-flex items-center gap-1 text-xs font-semibold text-ink bg-surface border border-slate-200 rounded-full px-3 py-1">
+            🕒 {{ business.hours_text }}
+          </span>
+        {% endif %}
+      </div>
+      {% endif %}
+
       {% if business.about %}
         <p class="text-sm text-slate-600 leading-loose mt-3">{{ business.about }}</p>
       {% endif %}

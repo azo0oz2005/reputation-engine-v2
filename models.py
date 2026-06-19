@@ -25,6 +25,9 @@ class Business(db.Model):
     brand_color = db.Column(db.String(20), nullable=True)          # لون النشاط الأساسي
     cover_path = db.Column(db.String(300), nullable=True)          # صورة غلاف الصفحة
     about = db.Column(db.Text, nullable=True)                       # نبذة قصيرة عن النشاط
+    google_rating = db.Column(db.String(10), nullable=True)         # شارة التقييم مثل 4.6
+    review_count = db.Column(db.String(20), nullable=True)          # عدد التقييمات
+    hours_text = db.Column(db.String(120), nullable=True)           # ساعات العمل (نص حر)
     welcome_message = db.Column(db.String(200), nullable=True)      # نص صفحة التقييم
     happy_message = db.Column(db.String(300), nullable=True)        # نص صفحة العميل الراضي
 

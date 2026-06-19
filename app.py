@@ -97,6 +97,9 @@ def ensure_schema():
         ("brand_color", "VARCHAR(20)"),
         ("cover_path", "VARCHAR(300)"),
         ("about", "TEXT"),
+        ("google_rating", "VARCHAR(10)"),
+        ("review_count", "VARCHAR(20)"),
+        ("hours_text", "VARCHAR(120)"),
         ("welcome_message", "VARCHAR(200)"),
         ("happy_message", "VARCHAR(300)"),
         ("whatsapp", "VARCHAR(40)"),
@@ -1323,6 +1326,13 @@ def register_routes(app: Flask):
             if re.match(r"^#[0-9A-Fa-f]{6}$", color):
                 business.brand_color = color
             business.about = (request.form.get("about") or "").strip() or None
+            business.google_rating = (
+                request.form.get("google_rating") or ""
+            ).strip() or None
+            business.review_count = (
+                request.form.get("review_count") or ""
+            ).strip() or None
+            business.hours_text = (request.form.get("hours_text") or "").strip() or None
             business.welcome_message = (
                 request.form.get("welcome_message") or ""
             ).strip() or None
