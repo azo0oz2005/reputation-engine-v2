@@ -327,8 +327,8 @@ def register_routes(app: Flask):
 
     @app.route("/pitch")
     def pitch():
-        # رقم واتساب للتواصل (يُضبط من إعدادات الخادم SALES_WHATSAPP بصيغة 9665XXXXXXXX)
-        whatsapp = (os.getenv("SALES_WHATSAPP") or "").strip()
+        # رقم واتساب للتواصل — يمكن تجاوزه من إعدادات الخادم SALES_WHATSAPP بصيغة 9665XXXXXXXX
+        whatsapp = (os.getenv("SALES_WHATSAPP") or "966582778392").strip()
         return render_template("pitch.html", whatsapp=whatsapp)
 
     @app.route("/admin/login", methods=["GET", "POST"])
