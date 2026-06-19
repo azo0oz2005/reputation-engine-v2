@@ -29,6 +29,7 @@ from models import (
     Feedback,
     LoyaltyMember,
     MenuCategory,
+    MenuImage,
     MenuItem,
     Offer,
     Reservation,
@@ -51,6 +52,7 @@ os.makedirs(INSTANCE_DIR, exist_ok=True)
 
 ALLOWED_IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_LOGO_SIZE = (600, 600)
+MAX_MENU_IMAGE_SIZE = (1400, 1800)  # أكبر عشان نص المنيو يضل واضح
 
 # رمز الدخول للوحة الإدارة (إضافة الأنشطة). يُضبط من إعدادات Render، ولا يُكتب في الكود.
 ADMIN_CODE = (os.getenv("ADMIN_CODE") or "").strip()
@@ -233,8 +235,8 @@ def normalize_phone(raw: str) -> str:
     return digits
 
 
-def save_image(file_storage, filename_base: str):
-    """يحفظ صورة (شعار/صنف منيو) بعد التحقق والتصغير. يعيد المسار النسبي أو None."""
+def save_image(file_storage, filename_base: str, max_size=MAX_LOGO_SIZE):
+    """يحفظ صورة (شعار/صنف منيو/صورة منيو) بعد التحقق والتصغير. يعيد المسار النسبي أو None."""
     if file_storage is None or not file_storage.filename:
         return None
 
@@ -253,7 +255,7 @@ def save_image(file_storage, filename_base: str):
             img = Image.alpha_composite(background, img).convert("RGB")
         else:
             img = img.convert("RGB")
-        img.thumbnail(MAX_LOGO_SIZE)
+        img.thumbnail(max_size)
     except ValueError:
         raise
     except Exception:
@@ -818,8 +820,13 @@ def register_routes(app: Flask):
         item_count = MenuItem.query.filter_by(
             business_id=business.id, is_available=True
         ).count()
+        image_count = MenuImage.query.filter_by(business_id=business.id).count()
         return render_template(
-            "hub.html", business=business, offers=offers, item_count=item_count
+            "hub.html",
+            business=business,
+            offers=offers,
+            item_count=item_count,
+            has_menu=(item_count > 0 or image_count > 0),
         )
 
     @app.route("/b/<slug>/menu")
@@ -843,11 +850,17 @@ def register_routes(app: Flask):
             .order_by(MenuItem.sort_order, MenuItem.id)
             .all()
         )
+        menu_images = (
+            MenuImage.query.filter_by(business_id=business.id)
+            .order_by(MenuImage.sort_order, MenuImage.id)
+            .all()
+        )
         return render_template(
             "menu_public.html",
             business=business,
             categories=categories,
             uncategorized=uncategorized,
+            menu_images=menu_images,
         )
 
     @app.route("/b/<slug>/reserve", methods=["GET", "POST"])
@@ -985,12 +998,56 @@ def register_routes(app: Flask):
             .order_by(MenuItem.sort_order, MenuItem.id)
             .all()
         )
+        menu_images = (
+            MenuImage.query.filter_by(business_id=business.id)
+            .order_by(MenuImage.sort_order, MenuImage.id)
+            .all()
+        )
         return render_template(
             "manage_menu.html",
             business=business,
             categories=categories,
             uncategorized=uncategorized,
+            menu_images=menu_images,
         )
+
+    @app.route("/dashboard/<slug>/menu/image/add", methods=["POST"])
+    @owner_required
+    def add_menu_image(business):
+        files = request.files.getlist("images") or []
+        added = 0
+        for f in files:
+            if not f or not f.filename:
+                continue
+            try:
+                path = save_image(
+                    f, f"menu-{secrets.token_hex(6)}", max_size=MAX_MENU_IMAGE_SIZE
+                )
+            except ValueError as exc:
+                flash(str(exc), "error")
+                continue
+            if path:
+                db.session.add(MenuImage(business_id=business.id, image_path=path))
+                added += 1
+        if added:
+            db.session.commit()
+            flash(f"تم رفع {added} صورة منيو.", "success")
+        return redirect(url_for("manage_menu", slug=business.slug))
+
+    @app.route("/dashboard/<slug>/menu/image/<int:img_id>/delete", methods=["POST"])
+    @owner_required
+    def delete_menu_image(business, img_id):
+        mi = MenuImage.query.filter_by(id=img_id, business_id=business.id).first()
+        if mi:
+            if mi.image_path:
+                try:
+                    os.remove(os.path.join(DATA_DIR, mi.image_path))
+                except OSError:
+                    pass
+            db.session.delete(mi)
+            db.session.commit()
+            flash("تم حذف صورة المنيو.", "success")
+        return redirect(url_for("manage_menu", slug=business.slug))
 
     @app.route("/dashboard/<slug>/menu/category/add", methods=["POST"])
     @owner_required
@@ -1232,6 +1289,27 @@ def register_routes(app: Flask):
     @owner_required
     def settings(business):
         if request.method == "POST":
+            # --- المعلومات الأساسية ---
+            name = (request.form.get("name") or "").strip()
+            if name:
+                business.name = name
+            category = (request.form.get("category") or "").strip()
+            if category:
+                business.category = category
+            business.phone = (request.form.get("phone") or "").strip() or None
+            business.email = (request.form.get("email") or "").strip() or None
+            gurl = (request.form.get("google_review_url") or "").strip()
+            if gurl:
+                business.google_review_url = gurl
+            try:
+                logo = request.files.get("logo")
+                new_logo = save_image(logo, f"{business.slug}-logo-{secrets.token_hex(4)}")
+                if new_logo:
+                    business.logo_path = new_logo
+            except ValueError as exc:
+                flash(str(exc), "error")
+                return redirect(url_for("settings", slug=business.slug))
+
             color = (request.form.get("brand_color") or "").strip()
             if re.match(r"^#[0-9A-Fa-f]{6}$", color):
                 business.brand_color = color

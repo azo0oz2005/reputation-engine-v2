@@ -70,6 +70,9 @@ class Business(db.Model):
     menu_items = db.relationship(
         "MenuItem", backref="business", lazy=True, cascade="all, delete-orphan"
     )
+    menu_images = db.relationship(
+        "MenuImage", backref="business", lazy=True, cascade="all, delete-orphan"
+    )
     offers = db.relationship(
         "Offer", backref="business", lazy=True, cascade="all, delete-orphan"
     )
@@ -146,6 +149,23 @@ class MenuItem(db.Model):
 
     def __repr__(self):
         return f"<MenuItem {self.name}>"
+
+
+class MenuImage(db.Model):
+    """صورة منيو جاهزة (لأن أغلب المطاعم منيوهم على شكل صورة)."""
+
+    __tablename__ = "menu_images"
+
+    id = db.Column(db.Integer, primary_key=True)
+    business_id = db.Column(
+        db.Integer, db.ForeignKey("businesses.id"), nullable=False, index=True
+    )
+    image_path = db.Column(db.String(300), nullable=False)
+    sort_order = db.Column(db.Integer, default=0, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    def __repr__(self):
+        return f"<MenuImage {self.id}>"
 
 
 class Offer(db.Model):

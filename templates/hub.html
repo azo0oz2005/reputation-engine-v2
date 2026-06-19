@@ -69,12 +69,12 @@
   <!-- شبكة الخدمات -->
   <div class="grid grid-cols-2 gap-3">
 
-    {% if business.menu_enabled and item_count > 0 %}
+    {% if business.menu_enabled and has_menu %}
     <a href="{{ url_for('public_menu', slug=business.slug) }}"
        class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📋</div>
       <p class="font-bold text-ink">المنيو</p>
-      <p class="text-xs text-muted mt-0.5">{{ item_count }} صنف</p>
+      <p class="text-xs text-muted mt-0.5">تصفّح الأصناف</p>
     </a>
     {% endif %}
 

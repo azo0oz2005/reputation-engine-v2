@@ -11,7 +11,37 @@
   {% include "_dash_nav.html" %}
 
   <h1 class="text-2xl font-extrabold text-ink mb-1">إدارة المنيو</h1>
-  <p class="text-muted text-sm mb-6">أضف أقسام وأصناف بأسعار وصور — وتظهر مباشرة في صفحة نشاطك.</p>
+  <p class="text-muted text-sm mb-6">عندك خياران: ترفع <b>صورة المنيو</b> جاهزة (الأسهل)، أو تدخل <b>أصناف</b> بأسعار وصور. وتقدر تستخدم الاثنين.</p>
+
+  <!-- رفع صورة منيو -->
+  <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 mb-6">
+    <h2 class="font-bold text-ink mb-1">🖼️ صورة المنيو</h2>
+    <p class="text-xs text-muted mb-3">لو منيوكم على شكل صورة (زي أغلب المقاهي)، ارفعها هنا وتظهر مباشرة. تقدر ترفع أكثر من صورة (منيو متعدد الصفحات).</p>
+    <form method="POST" action="{{ url_for('add_menu_image', slug=business.slug) }}" enctype="multipart/form-data" class="flex flex-wrap items-center gap-2">
+      <input name="images" type="file" accept="image/png,image/jpeg,image/webp" multiple
+             class="block text-sm text-muted file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-brand-100 file:text-brand-700 file:font-semibold">
+      <button class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl">رفع</button>
+    </form>
+    {% if menu_images %}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+      {% for mi in menu_images %}
+      <div class="relative group">
+        <img src="{{ url_for('media', filename=mi.image_path) }}" class="w-full h-40 object-cover rounded-xl border border-slate-100">
+        <form method="POST" action="{{ url_for('delete_menu_image', slug=business.slug, img_id=mi.id) }}"
+              onsubmit="return confirm('حذف صورة المنيو؟');" class="absolute top-2 left-2">
+          <button class="bg-white/90 text-danger border border-red-100 text-xs px-2 py-1 rounded-lg shadow">🗑 حذف</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="flex items-center gap-3 mb-6">
+    <div class="flex-1 h-px bg-slate-200"></div>
+    <span class="text-xs text-muted">أو أدخل الأصناف يدويًا (اختياري)</span>
+    <div class="flex-1 h-px bg-slate-200"></div>
+  </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-6">
     <!-- إضافة قسم -->
