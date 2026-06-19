@@ -42,6 +42,16 @@
                  class="block w-full text-sm text-muted file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-brand-100 file:text-brand-700 file:font-semibold">
         </div>
       </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-ink mb-1">صورة الغلاف <span class="text-muted font-normal">(تظهر خلف اللوقو في صفحتك)</span></label>
+        {% if business.cover_path %}
+          <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="w-full h-28 object-cover rounded-xl border border-slate-100 mb-2">
+        {% endif %}
+        <input name="cover" type="file" accept="image/png,image/jpeg,image/webp"
+               class="block w-full text-sm text-muted file:ml-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-brand-100 file:text-brand-700 file:font-semibold">
+        <p class="text-xs text-muted mt-1">صورة عريضة لمكانكم أو منتجاتكم تعطي الصفحة شكل احترافي.</p>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div>
           <label class="block text-sm font-semibold text-ink mb-1">اسم النشاط</label>

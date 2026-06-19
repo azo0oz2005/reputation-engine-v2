@@ -7,32 +7,38 @@
 <section class="max-w-md mx-auto px-4 py-5">
 
   <!-- بطاقة الترويسة الفخمة -->
-  <div class="relative rounded-[28px] overflow-hidden shadow-card mb-5">
-    <div class="px-6 pt-10 pb-16 text-center relative"
-         style="background: radial-gradient(120% 120% at 50% 0%, {{ c }} 0%, {{ c }}d9 55%, {{ c }}b3 100%);">
-      <!-- زخرفة خفيفة -->
-      <div class="absolute inset-0 opacity-10"
-           style="background-image: radial-gradient(circle at 20% 20%, #fff 1px, transparent 1px), radial-gradient(circle at 70% 60%, #fff 1px, transparent 1px); background-size: 26px 26px;"></div>
-      <div class="relative">
-        {% if business.logo_path %}
-          <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl overflow-hidden bg-white shadow-lg ring-4 ring-white/40">
-            <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-2">
-          </div>
-        {% else %}
-          <div class="inline-flex items-center justify-center w-28 h-28 rounded-3xl bg-white text-3xl font-extrabold shadow-lg ring-4 ring-white/40" style="color:{{ c }}">
-            {{ business.name[:1] }}
-          </div>
-        {% endif %}
-        <h1 class="text-2xl font-extrabold text-white mt-4 drop-shadow-sm">{{ business.name }}</h1>
-        <p class="text-sm text-white/85 mt-1">{{ business.category }}</p>
-      </div>
+  <div class="relative rounded-[28px] overflow-hidden shadow-card mb-16 anim-rise">
+    <!-- منطقة الغلاف -->
+    <div class="relative h-44">
+      {% if business.cover_path %}
+        <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+        <div class="absolute inset-0" style="background: linear-gradient(180deg, {{ c }}33 0%, {{ c }}cc 100%);"></div>
+      {% else %}
+        <div class="absolute inset-0" style="background: radial-gradient(130% 130% at 50% 0%, {{ c }} 0%, {{ c }}d9 55%, {{ c }}aa 100%);"></div>
+        <div class="absolute inset-0 opacity-10"
+             style="background-image: radial-gradient(circle at 20% 25%, #fff 1.5px, transparent 1.5px), radial-gradient(circle at 75% 60%, #fff 1.5px, transparent 1.5px); background-size: 30px 30px;"></div>
+      {% endif %}
     </div>
-    <!-- شريط النبذة المتداخل -->
-    {% if business.about %}
-    <div class="bg-white px-6 py-4 -mt-8 mx-4 rounded-2xl shadow-soft border border-slate-100 relative text-center">
-      <p class="text-sm text-slate-600 leading-loose">{{ business.about }}</p>
+    <!-- شريط أبيض فيه الاسم -->
+    <div class="bg-white pt-16 pb-5 px-6 text-center">
+      <h1 class="text-[22px] font-extrabold text-ink leading-tight">{{ business.name }}</h1>
+      <p class="text-sm text-muted mt-1">{{ business.category }}</p>
+      {% if business.about %}
+        <p class="text-sm text-slate-600 leading-loose mt-3">{{ business.about }}</p>
+      {% endif %}
     </div>
-    {% endif %}
+    <!-- اللوقو العائم -->
+    <div class="absolute top-44 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      {% if business.logo_path %}
+        <div class="w-24 h-24 rounded-3xl overflow-hidden bg-white shadow-card ring-4 ring-white flex items-center justify-center">
+          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-1.5">
+        </div>
+      {% else %}
+        <div class="w-24 h-24 rounded-3xl bg-white text-3xl font-extrabold shadow-card ring-4 ring-white flex items-center justify-center" style="color:{{ c }}">
+          {{ business.name[:1] }}
+        </div>
+      {% endif %}
+    </div>
   </div>
 
   <!-- العروض -->
@@ -55,7 +61,7 @@
 
   <!-- زر التقييم البارز -->
   <a href="{{ url_for('customer_rating', slug=business.slug) }}"
-     class="block rounded-2xl shadow-card p-5 mb-3 text-center text-white hover:opacity-95 transition relative overflow-hidden"
+     class="block rounded-2xl shadow-card p-5 mb-3 text-center text-white hover:opacity-95 hover:-translate-y-0.5 transition relative overflow-hidden anim-rise-2"
      style="background: linear-gradient(135deg, {{ c }}, {{ c }}cc);">
     <div class="flex items-center justify-center gap-3">
       <span class="text-3xl">⭐</span>
@@ -67,11 +73,11 @@
   </a>
 
   <!-- شبكة الخدمات -->
-  <div class="grid grid-cols-2 gap-3">
+  <div class="grid grid-cols-2 gap-3 anim-rise-3">
 
     {% if business.menu_enabled and has_menu %}
     <a href="{{ url_for('public_menu', slug=business.slug) }}"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
+       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📋</div>
       <p class="font-bold text-ink">المنيو</p>
       <p class="text-xs text-muted mt-0.5">تصفّح الأصناف</p>
@@ -80,7 +86,7 @@
 
     {% if business.loyalty_enabled %}
     <a href="{{ url_for('public_loyalty', slug=business.slug) }}"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
+       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">🎫</div>
       <p class="font-bold text-ink">بطاقة الولاء</p>
       <p class="text-xs text-muted mt-0.5">اجمع واربح</p>
@@ -89,7 +95,7 @@
 
     {% if business.reservations_enabled %}
     <a href="{{ url_for('public_reserve', slug=business.slug) }}"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
+       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">🗓️</div>
       <p class="font-bold text-ink">احجز طاولة</p>
       <p class="text-xs text-muted mt-0.5">بسهولة</p>
@@ -98,7 +104,7 @@
 
     {% if business.whatsapp %}
     <a href="https://wa.me/{{ business.whatsapp }}" target="_blank"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
+       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">💬</div>
       <p class="font-bold text-ink">واتساب</p>
       <p class="text-xs text-muted mt-0.5">تواصل معنا</p>
@@ -107,7 +113,7 @@
 
     {% if business.location_url %}
     <a href="{{ business.location_url }}" target="_blank"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
+       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📍</div>
       <p class="font-bold text-ink">الموقع</p>
       <p class="text-xs text-muted mt-0.5">الاتجاهات</p>
@@ -116,7 +122,7 @@
 
     {% if business.wifi_enabled and business.wifi_ssid %}
     <button onclick="document.getElementById('wifiBox').classList.toggle('hidden')"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card transition">
+       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
       <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📶</div>
       <p class="font-bold text-ink">واي فاي</p>
       <p class="text-xs text-muted mt-0.5">اتصل بشبكتنا</p>

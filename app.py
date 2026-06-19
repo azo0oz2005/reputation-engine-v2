@@ -53,6 +53,7 @@ os.makedirs(INSTANCE_DIR, exist_ok=True)
 ALLOWED_IMAGE_EXT = {".png", ".jpg", ".jpeg", ".webp"}
 MAX_LOGO_SIZE = (600, 600)
 MAX_MENU_IMAGE_SIZE = (1400, 1800)  # أكبر عشان نص المنيو يضل واضح
+MAX_COVER_SIZE = (1600, 900)        # صورة الغلاف عريضة
 
 # رمز الدخول للوحة الإدارة (إضافة الأنشطة). يُضبط من إعدادات Render، ولا يُكتب في الكود.
 ADMIN_CODE = (os.getenv("ADMIN_CODE") or "").strip()
@@ -94,6 +95,7 @@ def ensure_schema():
         ("access_code", "VARCHAR(12)"),
         ("is_active", "BOOLEAN DEFAULT 1"),
         ("brand_color", "VARCHAR(20)"),
+        ("cover_path", "VARCHAR(300)"),
         ("about", "TEXT"),
         ("welcome_message", "VARCHAR(200)"),
         ("happy_message", "VARCHAR(300)"),
@@ -1306,6 +1308,13 @@ def register_routes(app: Flask):
                 new_logo = save_image(logo, f"{business.slug}-logo-{secrets.token_hex(4)}")
                 if new_logo:
                     business.logo_path = new_logo
+                cover = request.files.get("cover")
+                new_cover = save_image(
+                    cover, f"{business.slug}-cover-{secrets.token_hex(4)}",
+                    max_size=MAX_COVER_SIZE,
+                )
+                if new_cover:
+                    business.cover_path = new_cover
             except ValueError as exc:
                 flash(str(exc), "error")
                 return redirect(url_for("settings", slug=business.slug))

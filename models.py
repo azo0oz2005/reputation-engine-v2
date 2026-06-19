@@ -23,6 +23,7 @@ class Business(db.Model):
 
     # --- تخصيص الهوية والصفحة ---
     brand_color = db.Column(db.String(20), nullable=True)          # لون النشاط الأساسي
+    cover_path = db.Column(db.String(300), nullable=True)          # صورة غلاف الصفحة
     about = db.Column(db.Text, nullable=True)                       # نبذة قصيرة عن النشاط
     welcome_message = db.Column(db.String(200), nullable=True)      # نص صفحة التقييم
     happy_message = db.Column(db.String(300), nullable=True)        # نص صفحة العميل الراضي
