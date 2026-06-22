@@ -2,175 +2,172 @@
 {% block title %}{{ business.name }}{% endblock %}
 {% block header %}{% endblock %}
 
+{# ===== أيقونات SVG (Lucide-style، بدون إيموجي) ===== #}
+{% macro icon(name) %}
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-[26px] h-[26px]">
+{%- if name == 'star' -%}<path d="M11.48 3.5a.56.56 0 0 1 1.04 0l2.12 5.11a.56.56 0 0 0 .48.35l5.52.44c.5.04.7.66.32.99l-4.2 3.6a.56.56 0 0 0-.18.56l1.28 5.39a.56.56 0 0 1-.84.6l-4.72-2.88a.56.56 0 0 0-.59 0L6.98 20.5a.56.56 0 0 1-.84-.6l1.28-5.4a.56.56 0 0 0-.18-.55l-4.2-3.6a.56.56 0 0 1 .32-.99l5.52-.44a.56.56 0 0 0 .48-.35z"/>
+{%- elif name == 'menu' -%}<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
+{%- elif name == 'ticket' -%}<path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/>
+{%- elif name == 'calendar' -%}<path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/>
+{%- elif name == 'chat' -%}<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>
+{%- elif name == 'pin' -%}<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+{%- elif name == 'wifi' -%}<path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M12 20h.01"/>
+{%- elif name == 'clock' -%}<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+{%- elif name == 'instagram' -%}<rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none"/>
+{%- elif name == 'tiktok' -%}<path d="M9 12a3 3 0 1 0 3 3V4c.5 2 2 3.5 4 3.8"/>
+{%- elif name == 'snapchat' -%}<path d="M12 3.5c2.6 0 4 1.9 4 4.4 0 .8 0 1.4.1 1.9.4.3 1 .2 1.5.5.4.2.4.8 0 1-.6.3-1.6.4-1.7 1 .4 1.2 1.7 1.9 2.7 2 .4.1.5.6.1.8-1 .6-2 .1-2.6.6-.3.3-.2 1-.7 1.2-.6.2-1.2-.5-2-.5s-1.4.7-2 .5c-.5-.2-.4-.9-.7-1.2-.6-.5-1.6 0-2.6-.6-.4-.2-.3-.7.1-.8 1-.1 2.3-.8 2.7-2-.1-.6-1.1-.7-1.7-1-.4-.2-.4-.8 0-1 .5-.3 1.1-.2 1.5-.5.1-.5.1-1.1.1-1.9 0-2.5 1.4-4.4 4-4.4Z"/>
+{%- elif name == 'x' -%}<path d="M4 4l7 8.5L4 20h2l6-7 5.5 7H22l-7.3-9L21.5 4h-2l-5.6 6.5L8.7 4z" fill="currentColor" stroke="none"/>
+{%- elif name == 'arrow' -%}<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+{%- endif -%}
+</svg>
+{% endmacro %}
+
 {% block content %}
 {% set c = business.color %}
-<section class="max-w-md mx-auto px-4 py-5">
+<style>
+  .glass { background: rgba(255,255,255,.16); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .lift { transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease; }
+  .lift:active { transform: scale(.97); }
+  @media (hover:hover){ .lift:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -12px rgba(15,23,42,.22); } }
+  .cta-shine { position:relative; overflow:hidden; }
+  .cta-shine::after { content:""; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.35),transparent); transform:skewX(-20deg);
+    animation:shine 4.5s ease-in-out infinite; }
+  @keyframes shine { 0%,60%{left:-60%} 100%{left:130%} }
+  @media (prefers-reduced-motion: reduce){ .cta-shine::after{animation:none} .anim-rise,.anim-rise-2,.anim-rise-3{animation:none} }
+</style>
 
-  <!-- بطاقة الترويسة الفخمة -->
-  <div class="relative rounded-[28px] overflow-hidden shadow-card mb-16 anim-rise">
-    <!-- منطقة الغلاف -->
-    <div class="relative h-44">
-      {% if business.cover_path %}
-        <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover">
-        <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(0,0,0,0) 30%, {{ c }}26 70%, {{ c }}cc 100%);"></div>
-      {% else %}
-        <div class="absolute inset-0" style="background: radial-gradient(130% 130% at 50% 0%, {{ c }} 0%, {{ c }}d9 55%, {{ c }}aa 100%);"></div>
-        <div class="absolute inset-0 opacity-10"
-             style="background-image: radial-gradient(circle at 20% 25%, #fff 1.5px, transparent 1.5px), radial-gradient(circle at 75% 60%, #fff 1.5px, transparent 1.5px); background-size: 30px 30px;"></div>
-      {% endif %}
-    </div>
-    <!-- شريط أبيض فيه الاسم -->
-    <div class="bg-white pt-16 pb-5 px-6 text-center">
-      <h1 class="text-[22px] font-extrabold text-ink leading-tight">{{ business.name }}</h1>
-      <p class="text-sm text-muted mt-1">{{ business.category }}</p>
+<section class="max-w-md mx-auto">
+
+  <!-- ===== الهيرو الغامر ===== -->
+  <header class="relative h-72 overflow-hidden rounded-b-[2rem] anim-rise">
+    {% if business.cover_path %}
+      <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+    {% else %}
+      <div class="absolute inset-0" style="background: radial-gradient(120% 120% at 50% 0%, {{ c }} 0%, {{ c }}d0 60%, {{ c }}99 100%);"></div>
+      <div class="absolute inset-0 opacity-[0.08]" style="background-image: radial-gradient(circle at 20% 25%, #fff 1.5px, transparent 1.5px), radial-gradient(circle at 75% 55%, #fff 1.5px, transparent 1.5px); background-size: 30px 30px;"></div>
+    {% endif %}
+    <!-- طبقة التعتيم لقراءة النص -->
+    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,.80) 0%, rgba(0,0,0,.30) 45%, rgba(0,0,0,0) 100%);"></div>
+
+    <div class="relative h-full flex flex-col items-center justify-end text-center px-6 pb-7">
+      <div class="w-20 h-20 rounded-2xl bg-white shadow-card ring-1 ring-white/40 flex items-center justify-center overflow-hidden mb-3">
+        {% if business.logo_path %}
+          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-1.5">
+        {% else %}
+          <span class="text-3xl font-extrabold" style="color:{{ c }}">{{ business.name[:1] }}</span>
+        {% endif %}
+      </div>
+      <h1 class="text-2xl font-extrabold text-white leading-tight" style="text-shadow:0 1px 8px rgba(0,0,0,.4)">{{ business.name }}</h1>
+      <p class="text-sm text-white/80 mt-0.5">{{ business.category }}</p>
 
       {% if business.google_rating or business.hours_text %}
       <div class="flex items-center justify-center gap-2 mt-3 flex-wrap">
         {% if business.google_rating %}
-          <span class="inline-flex items-center gap-1 text-xs font-semibold text-ink bg-amber-50 border border-amber-100 rounded-full px-3 py-1">
-            <span class="text-amber-400">★</span> {{ business.google_rating }}{% if business.review_count %} <span class="text-muted font-normal">· {{ business.review_count }} تقييم</span>{% endif %}
-          </span>
+        <span class="glass inline-flex items-center gap-1.5 text-xs font-semibold text-white rounded-full px-3 py-1.5 border border-white/25">
+          <span class="text-amber-300 w-3.5 h-3.5 inline-flex">{{ icon('star') }}</span>
+          {{ business.google_rating }}{% if business.review_count %} <span class="text-white/70 font-normal">· {{ business.review_count }} تقييم</span>{% endif %}
+        </span>
         {% endif %}
         {% if business.hours_text %}
-          <span class="inline-flex items-center gap-1 text-xs font-semibold text-ink bg-surface border border-slate-200 rounded-full px-3 py-1">
-            🕒 {{ business.hours_text }}
-          </span>
+        <span class="glass inline-flex items-center gap-1.5 text-xs font-semibold text-white rounded-full px-3 py-1.5 border border-white/25">
+          <span class="w-3.5 h-3.5 inline-flex">{{ icon('clock') }}</span> {{ business.hours_text }}
+        </span>
         {% endif %}
       </div>
       {% endif %}
-
-      {% if business.about %}
-        <p class="text-sm text-slate-600 leading-loose mt-3">{{ business.about }}</p>
-      {% endif %}
     </div>
-    <!-- اللوقو العائم -->
-    <div class="absolute top-44 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      {% if business.logo_path %}
-        <div class="w-24 h-24 rounded-3xl overflow-hidden bg-white shadow-card ring-4 ring-white flex items-center justify-center">
-          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-1.5">
-        </div>
-      {% else %}
-        <div class="w-24 h-24 rounded-3xl bg-white text-3xl font-extrabold shadow-card ring-4 ring-white flex items-center justify-center" style="color:{{ c }}">
-          {{ business.name[:1] }}
-        </div>
-      {% endif %}
-    </div>
-  </div>
+  </header>
 
-  <!-- العروض -->
-  {% if business.offers_enabled and offers %}
-  <div class="mb-5">
-    <p class="text-xs font-bold text-muted mb-2 px-1">✨ عروضنا</p>
-    <div class="space-y-2">
-      {% for o in offers %}
-      <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex items-start gap-3">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0" style="background:{{ c }}1a">{{ o.emoji or '🎁' }}</div>
-        <div>
-          <p class="font-bold text-ink leading-tight">{{ o.title }}</p>
-          {% if o.description %}<p class="text-sm text-muted mt-0.5 leading-relaxed">{{ o.description }}</p>{% endif %}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  {% endif %}
+  <div class="px-4 pt-5 pb-8">
 
-  <!-- زر التقييم البارز -->
-  <a href="{{ url_for('customer_rating', slug=business.slug) }}"
-     class="block rounded-2xl shadow-card p-5 mb-3 text-center text-white hover:opacity-95 hover:-translate-y-0.5 transition relative overflow-hidden anim-rise-2"
-     style="background: linear-gradient(135deg, {{ c }}, {{ c }}cc);">
-    <div class="flex items-center justify-center gap-3">
-      <span class="text-3xl">⭐</span>
-      <div class="text-right">
-        <p class="font-extrabold text-lg leading-tight">قيّم تجربتك</p>
-        <p class="text-xs text-white/85">رأيك يهمنا ويأخذ ثواني</p>
+    {% if business.about %}
+      <p class="text-center text-[15px] text-slate-600 leading-loose mb-5 anim-rise">{{ business.about }}</p>
+    {% endif %}
+
+    <!-- ===== العروض ===== -->
+    {% if business.offers_enabled and offers %}
+    <div class="mb-5 anim-rise">
+      <div class="space-y-2.5">
+        {% for o in offers %}
+        <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex items-start gap-3">
+          <span class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-xl" style="background:{{ c }}14;color:{{ c }}">{{ o.emoji or '🎁' }}</span>
+          <div>
+            <p class="font-bold text-ink leading-tight">{{ o.title }}</p>
+            {% if o.description %}<p class="text-sm text-muted mt-0.5 leading-relaxed">{{ o.description }}</p>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
-  </a>
-
-  <!-- شبكة الخدمات -->
-  <div class="grid grid-cols-2 gap-3 anim-rise-3">
-
-    {% if business.menu_enabled and has_menu %}
-    <a href="{{ url_for('public_menu', slug=business.slug) }}"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
-      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📋</div>
-      <p class="font-bold text-ink">المنيو</p>
-      <p class="text-xs text-muted mt-0.5">تصفّح الأصناف</p>
-    </a>
     {% endif %}
 
-    {% if business.loyalty_enabled %}
-    <a href="{{ url_for('public_loyalty', slug=business.slug) }}"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
-      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">🎫</div>
-      <p class="font-bold text-ink">بطاقة الولاء</p>
-      <p class="text-xs text-muted mt-0.5">اجمع واربح</p>
+    <!-- ===== زر التقييم (CTA رئيسي) ===== -->
+    <a href="{{ url_for('customer_rating', slug=business.slug) }}"
+       class="cta-shine lift block rounded-2xl p-[18px] mb-3 text-white anim-rise-2 shadow-card"
+       style="background: linear-gradient(135deg, {{ c }}, {{ c }}cc);">
+      <div class="flex items-center justify-center gap-3">
+        <span class="w-7 h-7 inline-flex text-amber-300">{{ icon('star') }}</span>
+        <span class="text-right">
+          <span class="block font-extrabold text-lg leading-tight">قيّم تجربتك</span>
+          <span class="block text-xs text-white/85">رأيك يهمنا · يأخذ ثواني</span>
+        </span>
+      </div>
     </a>
-    {% endif %}
 
-    {% if business.reservations_enabled %}
-    <a href="{{ url_for('public_reserve', slug=business.slug) }}"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
-      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">🗓️</div>
-      <p class="font-bold text-ink">احجز طاولة</p>
-      <p class="text-xs text-muted mt-0.5">بسهولة</p>
-    </a>
-    {% endif %}
+    <!-- ===== شبكة الخدمات ===== -->
+    <div class="grid grid-cols-2 gap-3 anim-rise-3">
 
-    {% if business.whatsapp %}
-    <a href="https://wa.me/{{ business.whatsapp }}" target="_blank"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
-      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">💬</div>
-      <p class="font-bold text-ink">واتساب</p>
-      <p class="text-xs text-muted mt-0.5">تواصل معنا</p>
-    </a>
-    {% endif %}
+      {% macro tile(href, title, sub, name, external=False) %}
+      <a href="{{ href }}" {% if external %}target="_blank" rel="noopener"{% endif %}
+         class="lift bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex flex-col items-center text-center">
+        <span class="w-12 h-12 rounded-xl flex items-center justify-center mb-2" style="background:{{ c }}14;color:{{ c }}">{{ icon(name) }}</span>
+        <p class="font-bold text-ink text-[15px]">{{ title }}</p>
+        <p class="text-xs text-muted mt-0.5">{{ sub }}</p>
+      </a>
+      {% endmacro %}
 
-    {% if business.location_url %}
-    <a href="{{ business.location_url }}" target="_blank"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
-      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📍</div>
-      <p class="font-bold text-ink">الموقع</p>
-      <p class="text-xs text-muted mt-0.5">الاتجاهات</p>
-    </a>
-    {% endif %}
+      {% if business.menu_enabled and has_menu %}{{ tile(url_for('public_menu', slug=business.slug), 'المنيو', 'تصفّح الأصناف', 'menu') }}{% endif %}
+      {% if business.loyalty_enabled %}{{ tile(url_for('public_loyalty', slug=business.slug), 'بطاقة الولاء', 'اجمع واربح', 'ticket') }}{% endif %}
+      {% if business.reservations_enabled %}{{ tile(url_for('public_reserve', slug=business.slug), 'احجز طاولة', 'بسهولة', 'calendar') }}{% endif %}
+      {% if business.whatsapp %}{{ tile('https://wa.me/' ~ business.whatsapp, 'واتساب', 'تواصل معنا', 'chat', external=True) }}{% endif %}
+      {% if business.location_url %}{{ tile(business.location_url, 'الموقع', 'الاتجاهات', 'pin', external=True) }}{% endif %}
+      {% if business.wifi_enabled and business.wifi_ssid %}
+      <button onclick="document.getElementById('wifiBox').classList.toggle('hidden')"
+              class="lift bg-white rounded-2xl shadow-soft border border-slate-100 p-4 flex flex-col items-center text-center">
+        <span class="w-12 h-12 rounded-xl flex items-center justify-center mb-2" style="background:{{ c }}14;color:{{ c }}">{{ icon('wifi') }}</span>
+        <p class="font-bold text-ink text-[15px]">واي فاي</p>
+        <p class="text-xs text-muted mt-0.5">اتصل بشبكتنا</p>
+      </button>
+      {% endif %}
+    </div>
 
+    <!-- صندوق الواي فاي -->
     {% if business.wifi_enabled and business.wifi_ssid %}
-    <button onclick="document.getElementById('wifiBox').classList.toggle('hidden')"
-       class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center hover:shadow-card hover:-translate-y-0.5 transition">
-      <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-2xl mb-2" style="background:{{ c }}1a">📶</div>
-      <p class="font-bold text-ink">واي فاي</p>
-      <p class="text-xs text-muted mt-0.5">اتصل بشبكتنا</p>
-    </button>
-    {% endif %}
-  </div>
-
-  <!-- صندوق الواي فاي -->
-  {% if business.wifi_enabled and business.wifi_ssid %}
-  <div id="wifiBox" class="hidden mt-3 bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center">
-    {% if business.wifi_qr_path %}
-      <img src="{{ url_for('media', filename=business.wifi_qr_path) }}" alt="WiFi QR" class="w-40 h-40 object-contain mx-auto mb-3">
-      <p class="text-xs text-muted mb-3">امسح الرمز للاتصال تلقائيًا</p>
-    {% endif %}
-    <div class="text-sm text-ink space-y-1">
-      <p>اسم الشبكة: <span class="font-bold" dir="ltr">{{ business.wifi_ssid }}</span></p>
-      {% if business.wifi_password %}<p>كلمة المرور: <span class="font-bold" dir="ltr">{{ business.wifi_password }}</span></p>{% endif %}
+    <div id="wifiBox" class="hidden mt-3 bg-white rounded-2xl shadow-soft border border-slate-100 p-5 text-center">
+      {% if business.wifi_qr_path %}
+        <img src="{{ url_for('media', filename=business.wifi_qr_path) }}" alt="WiFi QR" class="w-40 h-40 object-contain mx-auto mb-3">
+        <p class="text-xs text-muted mb-3">امسح الرمز للاتصال تلقائيًا</p>
+      {% endif %}
+      <div class="text-sm text-ink space-y-1">
+        <p>اسم الشبكة: <span class="font-bold" dir="ltr">{{ business.wifi_ssid }}</span></p>
+        {% if business.wifi_password %}<p>كلمة المرور: <span class="font-bold" dir="ltr">{{ business.wifi_password }}</span></p>{% endif %}
+      </div>
     </div>
-  </div>
-  {% endif %}
+    {% endif %}
 
-  <!-- روابط التواصل -->
-  {% if business.instagram_url or business.snapchat_url or business.tiktok_url or business.x_url %}
-  <div class="flex items-center justify-center gap-3 mt-6">
-    {% if business.instagram_url %}<a href="{{ business.instagram_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">📷</a>{% endif %}
-    {% if business.snapchat_url %}<a href="{{ business.snapchat_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">👻</a>{% endif %}
-    {% if business.tiktok_url %}<a href="{{ business.tiktok_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">🎵</a>{% endif %}
-    {% if business.x_url %}<a href="{{ business.x_url }}" target="_blank" class="w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-lg">𝕏</a>{% endif %}
-  </div>
-  {% endif %}
+    <!-- ===== التواصل ===== -->
+    {% if business.instagram_url or business.snapchat_url or business.tiktok_url or business.x_url %}
+    <div class="flex items-center justify-center gap-2.5 mt-7">
+      {% if business.instagram_url %}<a href="{{ business.instagram_url }}" target="_blank" rel="noopener" aria-label="إنستقرام" class="lift w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-slate-600">{{ icon('instagram') }}</a>{% endif %}
+      {% if business.snapchat_url %}<a href="{{ business.snapchat_url }}" target="_blank" rel="noopener" aria-label="سناب شات" class="lift w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-slate-600">{{ icon('snapchat') }}</a>{% endif %}
+      {% if business.tiktok_url %}<a href="{{ business.tiktok_url }}" target="_blank" rel="noopener" aria-label="تيك توك" class="lift w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-slate-600">{{ icon('tiktok') }}</a>{% endif %}
+      {% if business.x_url %}<a href="{{ business.x_url }}" target="_blank" rel="noopener" aria-label="إكس" class="lift w-11 h-11 rounded-full bg-white border border-slate-100 shadow-soft flex items-center justify-center text-slate-600">{{ icon('x') }}</a>{% endif %}
+    </div>
+    {% endif %}
 
-  <p class="text-center text-[11px] text-slate-400 mt-6">بواسطة سمعة برو</p>
+    <p class="text-center text-[11px] text-slate-400 mt-7">بواسطة سمعة برو</p>
+  </div>
 
 </section>
 {% endblock %}
