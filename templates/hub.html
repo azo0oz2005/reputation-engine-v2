@@ -40,33 +40,35 @@
 
 <section class="max-w-md mx-auto">
 
-  <!-- ===== الهيرو الغامر ===== -->
-  <header class="relative h-72 overflow-hidden rounded-b-[2rem] anim-rise">
-    <!-- خلفية بهوية المحل دائمًا -->
-    <div class="absolute inset-0" style="background: radial-gradient(120% 120% at 50% 0%, {{ c }} 0%, {{ c }}d0 60%, {{ c }}99 100%);"></div>
+  <!-- ===== واجهة الهوية ===== -->
+  <header class="relative h-[360px] overflow-hidden rounded-b-[2.2rem] anim-rise">
+    <div class="absolute inset-0" style="background: linear-gradient(160deg, {{ c }} 0%, {{ c }}cc 55%, {{ c }}99 100%);"></div>
     {% if business.cover_path %}
-      <!-- صورة الغلاف كخلفية ناعمة (تتكيّف مع أي شكل بدون قص) -->
-      <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-80">
-      <div class="absolute inset-0" style="background: linear-gradient(180deg, {{ c }}33 0%, {{ c }}66 100%);"></div>
-    {% else %}
-      <div class="absolute inset-0 opacity-[0.08]" style="background-image: radial-gradient(circle at 20% 25%, #fff 1.5px, transparent 1.5px), radial-gradient(circle at 75% 55%, #fff 1.5px, transparent 1.5px); background-size: 30px 30px;"></div>
+      <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-70">
+      <div class="absolute inset-0" style="background: linear-gradient(160deg, {{ c }}55 0%, {{ c }}88 100%);"></div>
     {% endif %}
-    <!-- طبقة التعتيم لقراءة النص -->
-    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.28) 48%, rgba(0,0,0,0) 100%);"></div>
+    <!-- لمعة علوية + نقوش خافتة + تظليل سفلي -->
+    <div class="absolute inset-0" style="background: radial-gradient(85% 55% at 50% -5%, rgba(255,255,255,.20), transparent 70%);"></div>
+    <div class="absolute inset-0 opacity-[0.07]" style="background-image: radial-gradient(circle at 18% 22%, #fff 1.5px, transparent 1.5px), radial-gradient(circle at 78% 62%, #fff 1.5px, transparent 1.5px); background-size: 34px 34px;"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,.32) 0%, rgba(0,0,0,0) 52%);"></div>
 
-    <div class="relative h-full flex flex-col items-center justify-end text-center px-6 pb-7">
-      <div class="w-20 h-20 rounded-2xl bg-white shadow-card ring-1 ring-white/40 flex items-center justify-center overflow-hidden mb-3">
+    <div class="relative h-full flex flex-col items-center justify-center text-center px-6">
+      <div class="w-28 h-28 rounded-[26px] bg-white shadow-card ring-1 ring-white/50 flex items-center justify-center overflow-hidden mb-4">
         {% if business.logo_path %}
-          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-1.5">
+          <img src="{{ url_for('media', filename=business.logo_path) }}" alt="{{ business.name }}" class="w-full h-full object-contain p-2.5">
         {% else %}
-          <span class="text-3xl font-extrabold" style="color:{{ c }}">{{ business.name[:1] }}</span>
+          <span class="text-4xl font-extrabold" style="color:{{ c }}">{{ business.name[:1] }}</span>
         {% endif %}
       </div>
-      <h1 class="text-2xl font-extrabold text-white leading-tight" style="text-shadow:0 1px 8px rgba(0,0,0,.4)">{{ business.name }}</h1>
-      <p class="text-sm text-white/80 mt-0.5">{{ business.category }}</p>
+      <h1 class="text-[26px] font-extrabold text-white leading-tight" style="text-shadow:0 1px 10px rgba(0,0,0,.35)">{{ business.name }}</h1>
+      {% if business.about %}
+        <p class="text-sm text-white/85 mt-2 max-w-[19rem] leading-relaxed">{{ business.about }}</p>
+      {% else %}
+        <p class="text-sm text-white/75 mt-1">{{ business.category }}</p>
+      {% endif %}
 
       {% if business.google_rating or business.hours_text %}
-      <div class="flex items-center justify-center gap-2 mt-3 flex-wrap">
+      <div class="flex items-center justify-center gap-2 mt-4 flex-wrap">
         {% if business.google_rating %}
         <span class="glass inline-flex items-center gap-1.5 text-xs font-semibold text-white rounded-full px-3 py-1.5 border border-white/25">
           <span class="text-amber-300 w-3.5 h-3.5 inline-flex">{{ icon('star') }}</span>
@@ -83,11 +85,7 @@
     </div>
   </header>
 
-  <div class="px-4 pt-5 pb-8">
-
-    {% if business.about %}
-      <p class="text-center text-[15px] text-slate-600 leading-loose mb-5 anim-rise">{{ business.about }}</p>
-    {% endif %}
+  <div class="px-4 pt-6 pb-8">
 
     <!-- ===== العروض ===== -->
     {% if business.offers_enabled and offers %}
