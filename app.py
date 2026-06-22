@@ -1319,6 +1319,8 @@ def register_routes(app: Flask):
                 new_logo = save_image(logo, f"{business.slug}-logo-{secrets.token_hex(4)}")
                 if new_logo:
                     business.logo_path = new_logo
+                if request.form.get("remove_cover"):
+                    business.cover_path = None
                 cover = request.files.get("cover")
                 new_cover = save_image(
                     cover, f"{business.slug}-cover-{secrets.token_hex(4)}",

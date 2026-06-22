@@ -47,7 +47,7 @@
     {% if business.logo_path %}
       <img src="{{ url_for('media', filename=business.logo_path) }}"
            alt="{{ business.name }}"
-           class="w-24 h-24 object-cover rounded-2xl mx-auto mb-4 border border-slate-100">
+           class="max-w-[200px] max-h-24 w-auto h-auto object-contain mx-auto mb-4">
     {% endif %}
 
     <h1 class="text-2xl font-extrabold text-slate-900 leading-snug">{{ business.name }}</h1>
