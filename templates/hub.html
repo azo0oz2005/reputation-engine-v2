@@ -41,14 +41,17 @@
 
   <!-- ===== الهيرو الغامر ===== -->
   <header class="relative h-72 overflow-hidden rounded-b-[2rem] anim-rise">
+    <!-- خلفية بهوية المحل دائمًا -->
+    <div class="absolute inset-0" style="background: radial-gradient(120% 120% at 50% 0%, {{ c }} 0%, {{ c }}d0 60%, {{ c }}99 100%);"></div>
     {% if business.cover_path %}
-      <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover">
+      <!-- صورة الغلاف كخلفية ناعمة (تتكيّف مع أي شكل بدون قص) -->
+      <img src="{{ url_for('media', filename=business.cover_path) }}" alt="" class="absolute inset-0 w-full h-full object-cover scale-125 blur-2xl opacity-80">
+      <div class="absolute inset-0" style="background: linear-gradient(180deg, {{ c }}33 0%, {{ c }}66 100%);"></div>
     {% else %}
-      <div class="absolute inset-0" style="background: radial-gradient(120% 120% at 50% 0%, {{ c }} 0%, {{ c }}d0 60%, {{ c }}99 100%);"></div>
       <div class="absolute inset-0 opacity-[0.08]" style="background-image: radial-gradient(circle at 20% 25%, #fff 1.5px, transparent 1.5px), radial-gradient(circle at 75% 55%, #fff 1.5px, transparent 1.5px); background-size: 30px 30px;"></div>
     {% endif %}
     <!-- طبقة التعتيم لقراءة النص -->
-    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,.80) 0%, rgba(0,0,0,.30) 45%, rgba(0,0,0,0) 100%);"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.28) 48%, rgba(0,0,0,0) 100%);"></div>
 
     <div class="relative h-full flex flex-col items-center justify-end text-center px-6 pb-7">
       <div class="w-20 h-20 rounded-2xl bg-white shadow-card ring-1 ring-white/40 flex items-center justify-center overflow-hidden mb-3">
