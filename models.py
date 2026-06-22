@@ -34,6 +34,7 @@ class Business(db.Model):
     # --- روابط التواصل والموقع ---
     whatsapp = db.Column(db.String(40), nullable=True)             # 9665xxxxxxxx للطلب/التواصل
     location_url = db.Column(db.String(600), nullable=True)        # رابط الموقع على الخرائط
+    store_url = db.Column(db.String(600), nullable=True)           # رابط المتجر الإلكتروني (سلة/متجر)
     instagram_url = db.Column(db.String(300), nullable=True)
     snapchat_url = db.Column(db.String(300), nullable=True)
     tiktok_url = db.Column(db.String(300), nullable=True)

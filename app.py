@@ -104,6 +104,7 @@ def ensure_schema():
         ("happy_message", "VARCHAR(300)"),
         ("whatsapp", "VARCHAR(40)"),
         ("location_url", "VARCHAR(600)"),
+        ("store_url", "VARCHAR(600)"),
         ("instagram_url", "VARCHAR(300)"),
         ("snapchat_url", "VARCHAR(300)"),
         ("tiktok_url", "VARCHAR(300)"),
@@ -1353,6 +1354,7 @@ def register_routes(app: Flask):
             business.location_url = (
                 request.form.get("location_url") or ""
             ).strip() or None
+            business.store_url = (request.form.get("store_url") or "").strip() or None
             business.instagram_url = (
                 request.form.get("instagram_url") or ""
             ).strip() or None

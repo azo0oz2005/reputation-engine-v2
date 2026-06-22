@@ -12,6 +12,7 @@
 {%- elif name == 'chat' -%}<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>
 {%- elif name == 'pin' -%}<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
 {%- elif name == 'wifi' -%}<path d="M5 13a10 10 0 0 1 14 0"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M12 20h.01"/>
+{%- elif name == 'store' -%}<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
 {%- elif name == 'clock' -%}<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
 {%- elif name == 'instagram' -%}<rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.7" fill="currentColor" stroke="none"/>
 {%- elif name == 'tiktok' -%}<path d="M9 12a3 3 0 1 0 3 3V4c.5 2 2 3.5 4 3.8"/>
@@ -133,6 +134,7 @@
       {% if business.menu_enabled and has_menu %}{{ tile(url_for('public_menu', slug=business.slug), 'المنيو', 'تصفّح الأصناف', 'menu') }}{% endif %}
       {% if business.loyalty_enabled %}{{ tile(url_for('public_loyalty', slug=business.slug), 'بطاقة الولاء', 'اجمع واربح', 'ticket') }}{% endif %}
       {% if business.reservations_enabled %}{{ tile(url_for('public_reserve', slug=business.slug), 'احجز طاولة', 'بسهولة', 'calendar') }}{% endif %}
+      {% if business.store_url %}{{ tile(business.store_url, 'المتجر الإلكتروني', 'اطلب أونلاين', 'store', external=True) }}{% endif %}
       {% if business.whatsapp %}{{ tile('https://wa.me/' ~ business.whatsapp, 'واتساب', 'تواصل معنا', 'chat', external=True) }}{% endif %}
       {% if business.location_url %}{{ tile(business.location_url, 'الموقع', 'الاتجاهات', 'pin', external=True) }}{% endif %}
       {% if business.wifi_enabled and business.wifi_ssid %}
