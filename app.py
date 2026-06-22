@@ -331,6 +331,14 @@ def register_routes(app: Flask):
         whatsapp = (os.getenv("SALES_WHATSAPP") or "966582778392").strip()
         return render_template("pitch.html", whatsapp=whatsapp)
 
+    @app.route("/subscribe")
+    def subscribe():
+        whatsapp = (os.getenv("SALES_WHATSAPP") or "966582778392").strip()
+        stc_pay = (os.getenv("STC_PAY_NUMBER") or "0566220669").strip()
+        return render_template(
+            "subscribe.html", whatsapp=whatsapp, stc_pay=stc_pay
+        )
+
     @app.route("/admin/login", methods=["GET", "POST"])
     def admin_login():
         if session.get("admin_auth"):

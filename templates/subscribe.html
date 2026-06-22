@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}الاشتراك في سمعة برو{% endblock %}
+{% block header_nav %}{% endblock %}
+{% block header_brand %}
+<div class="flex items-center gap-2">
+  <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-brand-100 text-brand-700 font-bold">س</span>
+  <span class="font-extrabold text-lg text-ink">سمعة برو</span>
+</div>
+{% endblock %}
+
+{% block content %}
+<section class="max-w-md mx-auto px-4 py-4">
+
+  <div class="text-center mb-6">
+    <span class="inline-block bg-brand-100 text-brand-700 font-bold text-sm rounded-full px-4 py-1.5 mb-4">🎉 عرض المؤسسين</span>
+    <h1 class="text-2xl font-extrabold text-ink mb-2">اشترك في سمعة برو</h1>
+    <p class="text-muted leading-loose">جرّب ٧ أيام مجانًا. عجبك؟ فعّل اشتراكك بخطوات بسيطة عبر STC Pay.</p>
+  </div>
+
+  <!-- بطاقة السعر -->
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 p-6 mb-4 text-center">
+    <div class="flex items-end justify-center gap-2 mb-1">
+      <span class="text-5xl font-extrabold text-ink">١٤٩</span>
+      <span class="text-muted mb-2">﷼ / شهر</span>
+    </div>
+    <p class="text-sm text-muted mb-1">سعر المؤسسين — ثابت لك ما دمت مشترك (بدلًا من ١٩٩).</p>
+    <p class="text-xs text-slate-400 mb-5">أقل من ٥ ريال باليوم.</p>
+    <ul class="text-right space-y-2 max-w-xs mx-auto text-sm text-ink">
+      <li class="flex items-center gap-2"><span class="text-brand-600">✓</span> تقييمات Google أكثر + حماية سمعتك</li>
+      <li class="flex items-center gap-2"><span class="text-brand-600">✓</span> صفحة أعمال احترافية + منيو رقمي</li>
+      <li class="flex items-center gap-2"><span class="text-brand-600">✓</span> بطاقة ولاء + عروض + حجوزات</li>
+      <li class="flex items-center gap-2"><span class="text-brand-600">✓</span> لوحة تحكم + تحليلات لحظية</li>
+    </ul>
+  </div>
+
+  <!-- الدفع عبر STC Pay -->
+  <div class="bg-white rounded-3xl shadow-card border border-slate-100 p-6 mb-4">
+    <div class="flex items-center gap-2 mb-4">
+      <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#4F008C]/10 text-[#4F008C] text-lg font-bold">S</span>
+      <h2 class="font-extrabold text-ink">الدفع عبر STC Pay</h2>
+    </div>
+
+    <p class="text-xs font-semibold text-muted mb-1">حوّل المبلغ على رقم STC Pay التالي:</p>
+    <div class="flex items-center gap-2 bg-surface rounded-xl border border-slate-200 px-4 py-3 mb-4">
+      <span id="stcNum" class="flex-1 text-xl font-extrabold tracking-wide text-ink" dir="ltr">{{ stc_pay }}</span>
+      <button onclick="copyStc()" class="text-sm bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-2 rounded-lg">نسخ</button>
+    </div>
+
+    <ol class="space-y-3 text-sm text-ink">
+      <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center">١</span> افتح تطبيق STC Pay واختر «تحويل».</li>
+      <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center">٢</span> حوّل <span class="font-bold">١٤٩ ﷼</span> على الرقم أعلاه.</li>
+      <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center">٣</span> أرسل لنا <span class="font-bold">صورة إيصال التحويل</span> على واتساب.</li>
+      <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center">٤</span> نفعّل اشتراكك <span class="font-bold">فورًا</span> ونرسل لك التأكيد. ✅</li>
+    </ol>
+  </div>
+
+  <!-- زر واتساب -->
+  <a href="https://wa.me/{{ whatsapp }}?text={{ 'حوّلت اشتراك سمعة برو عبر STC Pay، هذي صورة الإيصال'|urlencode }}"
+     class="block w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-4 rounded-2xl shadow-card text-center text-lg transition">
+    أرسل إيصال التحويل عبر واتساب
+  </a>
+  <p class="text-center text-xs text-muted mt-3">بدون عقود · أوقف اشتراكك في أي وقت.</p>
+
+</section>
+
+<script>
+  function copyStc() {
+    var n = document.getElementById('stcNum').innerText.trim();
+    navigator.clipboard.writeText(n).then(function () {
+      var b = event.target; var t = b.innerText; b.innerText = 'تم النسخ ✓';
+      setTimeout(function(){ b.innerText = t; }, 1500);
+    });
+  }
+</script>
+{% endblock %}
