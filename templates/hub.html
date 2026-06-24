@@ -36,9 +36,17 @@
     animation:shine 4.5s ease-in-out infinite; }
   @keyframes shine { 0%,60%{left:-60%} 100%{left:130%} }
   @media (prefers-reduced-motion: reduce){ .cta-shine::after{animation:none} .anim-rise,.anim-rise-2,.anim-rise-3{animation:none} }
+  {% if business.theme == 'dark' %}
+  body { background:#0d0d0f !important; }
+  .hub-wrap .bg-white { background:#1b1c20 !important; }
+  .hub-wrap .border-slate-100, .hub-wrap .border-slate-200 { border-color:#2b2c33 !important; }
+  .hub-wrap .text-ink { color:#f4f4f5 !important; }
+  .hub-wrap .text-muted, .hub-wrap .text-slate-600, .hub-wrap .text-slate-400 { color:#a1a1aa !important; }
+  .hub-wrap .shadow-soft, .hub-wrap .shadow-card { box-shadow:0 10px 34px -14px rgba(0,0,0,.7) !important; }
+  {% endif %}
 </style>
 
-<section class="max-w-md mx-auto">
+<section class="hub-wrap max-w-md mx-auto">
 
   <!-- ===== واجهة الهوية ===== -->
   <header class="relative h-[360px] overflow-hidden rounded-b-[2.2rem] anim-rise">

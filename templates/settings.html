@@ -102,11 +102,20 @@
     <!-- الهوية -->
     <div class="bg-white rounded-2xl shadow-soft border border-slate-100 p-5 space-y-4">
       <h2 class="font-bold text-ink">🎨 الهوية والنصوص</h2>
-      <div>
-        <label class="block text-sm font-semibold text-ink mb-1">اللون الأساسي</label>
-        <div class="flex items-center gap-3">
-          <input name="brand_color" type="color" value="{{ business.color }}" class="w-14 h-11 rounded-lg border border-slate-200 cursor-pointer">
-          <span class="text-sm text-muted" dir="ltr">{{ business.color }}</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">اللون الأساسي</label>
+          <div class="flex items-center gap-3">
+            <input name="brand_color" type="color" value="{{ business.color }}" class="w-14 h-11 rounded-lg border border-slate-200 cursor-pointer">
+            <span class="text-sm text-muted" dir="ltr">{{ business.color }}</span>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-ink mb-1">مظهر الصفحة</label>
+          <select name="theme" class="w-full border border-slate-200 rounded-xl px-3 py-2.5 bg-white focus:outline-none focus:ring-2 focus:ring-brand-500">
+            <option value="light" {% if business.theme != 'dark' %}selected{% endif %}>فاتح</option>
+            <option value="dark" {% if business.theme == 'dark' %}selected{% endif %}>غامق (فخم)</option>
+          </select>
         </div>
       </div>
       <div>

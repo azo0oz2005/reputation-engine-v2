@@ -23,6 +23,7 @@ class Business(db.Model):
 
     # --- تخصيص الهوية والصفحة ---
     brand_color = db.Column(db.String(20), nullable=True)          # لون النشاط الأساسي
+    theme = db.Column(db.String(10), nullable=True)                # light / dark
     cover_path = db.Column(db.String(300), nullable=True)          # صورة غلاف الصفحة
     about = db.Column(db.Text, nullable=True)                       # نبذة قصيرة عن النشاط
     google_rating = db.Column(db.String(10), nullable=True)         # شارة التقييم مثل 4.6
